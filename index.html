@@ -287,6 +287,110 @@
             background: #f8f9fa;
             transform: translateX(-5px);
         }
+        /* ===== LOGIN STYLES ===== */
+.login-container {
+    background: white;
+    padding: 40px 35px;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+    max-width: 420px;
+    width: 100%;
+    text-align: center;
+    margin: 0 auto;
+}
+.login-container h1 {
+    font-size: 2em;
+    color: #2c3e50;
+    margin-bottom: 5px;
+}
+.login-container h1 i {
+    color: #e67e22;
+}
+.login-container .subtitle {
+    color: #7f8c8d;
+    margin-bottom: 25px;
+    font-size: 0.95em;
+}
+.login-container .form-group {
+    margin-bottom: 18px;
+    text-align: left;
+}
+.login-container .form-group label {
+    display: block;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 5px;
+    font-size: 0.9em;
+}
+.login-container .form-group input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    font-size: 1em;
+    transition: border-color 0.3s;
+}
+.login-container .form-group input:focus {
+    border-color: #3498db;
+    outline: none;
+}
+.login-btn {
+    width: 100%;
+    padding: 14px;
+    background: #e67e22;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+    margin-top: 5px;
+}
+.login-btn:hover {
+    background: #d35400;
+}
+.login-btn i {
+    margin-right: 8px;
+}
+.login-btn.secondary {
+    background: #3498db;
+}
+.login-btn.secondary:hover {
+    background: #2980b9;
+}
+.login-container .demo-info {
+    margin-top: 20px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    font-size: 0.85em;
+    color: #7f8c8d;
+    text-align: left;
+}
+.login-container .demo-info strong {
+    color: #2c3e50;
+}
+.login-container .error-msg {
+    color: #e74c3c;
+    font-size: 0.9em;
+    min-height: 30px;
+    margin-top: 10px;
+}
+.login-container .success-msg {
+    color: #27ae60;
+    font-size: 0.9em;
+    min-height: 30px;
+    margin-top: 10px;
+}
+.login-container .switch-link {
+    color: #3498db;
+    cursor: pointer;
+    font-weight: 600;
+}
+.login-container .switch-link:hover {
+    text-decoration: underline;
+}
 
         .notification {
             position: fixed;
@@ -341,6 +445,66 @@
     </style>
 </head>
 <body>
+
+    <!-- ===== LOGIN PAGE ===== -->
+<div id="loginPage" class="login-container">
+    <h1><i class="fas fa-utensils"></i> Nabz-Tech Eats</h1>
+    <p class="subtitle">Restaurant Admin Login</p>
+
+    <div id="loginForm">
+        <div class="form-group">
+            <label><i class="fas fa-user"></i> Username</label>
+            <input type="text" id="loginUsername" placeholder="Enter username" value="admin">
+        </div>
+        <div class="form-group">
+            <label><i class="fas fa-lock"></i> Password</label>
+            <input type="password" id="loginPassword" placeholder="Enter password" value="admin123">
+        </div>
+        <button class="login-btn" onclick="login()">
+            <i class="fas fa-sign-in-alt"></i> Login
+        </button>
+        <p style="margin-top: 12px; font-size: 0.9em;">
+            Don't have an account? <span class="switch-link" onclick="showRegister()">Create Account</span>
+        </p>
+        <div id="loginError" class="error-msg"></div>
+    </div>
+
+    <div id="registerForm" style="display: none;">
+        <div class="form-group">
+            <label><i class="fas fa-user"></i> Full Name</label>
+            <input type="text" id="regFullName" placeholder="Enter full name">
+        </div>
+        <div class="form-group">
+            <label><i class="fas fa-user-tag"></i> Username</label>
+            <input type="text" id="regUsername" placeholder="Choose a username">
+        </div>
+        <div class="form-group">
+            <label><i class="fas fa-lock"></i> Password</label>
+            <input type="password" id="regPassword" placeholder="Choose a password">
+        </div>
+        <div class="form-group">
+            <label><i class="fas fa-lock"></i> Confirm Password</label>
+            <input type="password" id="regConfirmPassword" placeholder="Confirm password">
+        </div>
+        <button class="login-btn secondary" onclick="registerUser()">
+            <i class="fas fa-user-plus"></i> Create Account
+        </button>
+        <p style="margin-top: 12px; font-size: 0.9em;">
+            Already have an account? <span class="switch-link" onclick="showLogin()">Login</span>
+        </p>
+        <div id="registerError" class="error-msg"></div>
+        <div id="registerSuccess" class="success-msg"></div>
+    </div>
+
+    <div class="demo-info">
+        <strong>Default Admin:</strong><br>
+        👤 Username: <strong>admin</strong><br>
+        🔒 Password: <strong>admin123</strong>
+    </div>
+</div>
+
+<!-- ===== DASHBOARD ===== -->
+<div id="dashboardPage" class="dashboard" style="display: none;">
 
     <div class="header">
         <h1>🍕 Admin Dashboard</h1>
@@ -405,9 +569,306 @@
     </a>
 
     <script>
+
+        // ============================================================
+// 0. USER MANAGEMENT & LOGIN FUNCTIONS
+// ============================================================
+
+function getUsers() {
+    return JSON.parse(localStorage.getItem('nabzUsers')) || [];
+}
+
+function saveUsers(users) {
+    localStorage.setItem('nabzUsers', JSON.stringify(users));
+}
+
+function getActivity() {
+    return JSON.parse(localStorage.getItem('nabzActivity')) || [];
+}
+
+function saveActivity(activity) {
+    localStorage.setItem('nabzActivity', JSON.stringify(activity));
+}
+
+function logActivity(username, action, details) {
+    var activity = getActivity();
+    activity.unshift({
+        username: username,
+        action: action,
+        details: details || '',
+        time: new Date().toLocaleString()
+    });
+    saveActivity(activity);
+}
+
+// ============================================================
+// REGISTER FUNCTIONS
+// ============================================================
+function showRegister() {
+    document.getElementById('loginForm').style.display = 'none';
+    document.getElementById('registerForm').style.display = 'block';
+    document.getElementById('loginError').textContent = '';
+    document.getElementById('registerError').textContent = '';
+    document.getElementById('registerSuccess').textContent = '';
+}
+
+function showLogin() {
+    document.getElementById('loginForm').style.display = 'block';
+    document.getElementById('registerForm').style.display = 'none';
+    document.getElementById('loginError').textContent = '';
+    document.getElementById('registerError').textContent = '';
+    document.getElementById('registerSuccess').textContent = '';
+}
+
+function registerUser() {
+    var fullName = document.getElementById('regFullName').value.trim();
+    var username = document.getElementById('regUsername').value.trim();
+    var password = document.getElementById('regPassword').value;
+    var confirmPassword = document.getElementById('regConfirmPassword').value;
+    var errorEl = document.getElementById('registerError');
+    var successEl = document.getElementById('registerSuccess');
+
+    errorEl.textContent = '';
+    successEl.textContent = '';
+
+    if (!fullName) { errorEl.textContent = '❌ Please enter your full name.'; return; }
+    if (!username) { errorEl.textContent = '❌ Please choose a username.'; return; }
+    if (username.length < 3) { errorEl.textContent = '❌ Username must be at least 3 characters.'; return; }
+    if (!password) { errorEl.textContent = '❌ Please choose a password.'; return; }
+    if (password.length < 6) { errorEl.textContent = '❌ Password must be at least 6 characters.'; return; }
+    if (password !== confirmPassword) { errorEl.textContent = '❌ Passwords do not match.'; return; }
+
+    var users = getUsers();
+    if (users.find(function(u) { return u.username === username; })) {
+        errorEl.textContent = '❌ Username already exists. Please choose another.';
+        return;
+    }
+
+    users.push({
+        fullName: fullName,
+        username: username,
+        password: password,
+        role: 'staff',
+        status: 'active',
+        created: new Date().toLocaleString()
+    });
+    saveUsers(users);
+
+    successEl.textContent = '✅ Account created successfully! You can now login.';
+    document.getElementById('regFullName').value = '';
+    document.getElementById('regUsername').value = '';
+    document.getElementById('regPassword').value = '';
+    document.getElementById('regConfirmPassword').value = '';
+
+    setTimeout(function() {
+        showLogin();
+        successEl.textContent = '';
+    }, 2000);
+}
+
+// ============================================================
+// LOGIN FUNCTION
+// ============================================================
+var currentUser = null;
+
+function login() {
+    var username = document.getElementById('loginUsername').value.trim();
+    var password = document.getElementById('loginPassword').value.trim();
+    var errorEl = document.getElementById('loginError');
+
+    errorEl.textContent = '';
+
+    if (!username || !password) {
+        errorEl.textContent = '❌ Please enter username and password.';
+        return;
+    }
+
+    var users = getUsers();
+
+    var user = users.find(function(u) {
+        return u.username === username && u.password === password && u.status === 'active';
+    });
+
+    if (!user) {
+        if (username === 'admin' && password === 'admin123') {
+            var existing = users.find(function(u) { return u.username === 'admin'; });
+            if (!existing) {
+                users.push({
+                    fullName: 'Administrator',
+                    username: 'admin',
+                    password: 'admin123',
+                    role: 'admin',
+                    status: 'active',
+                    created: new Date().toLocaleString()
+                });
+                saveUsers(users);
+                user = { fullName: 'Administrator', username: 'admin', role: 'admin' };
+            } else {
+                user = existing;
+            }
+        } else {
+            errorEl.textContent = '❌ Invalid username or password.';
+            return;
+        }
+    }
+
+    currentUser = user;
+
+    document.getElementById('loginPage').style.display = 'none';
+    document.getElementById('dashboardPage').style.display = 'block';
+    document.getElementById('currentUser').textContent = '👤 ' + user.username;
+    document.getElementById('userRole').textContent = user.role || 'Staff';
+
+    logActivity(user.username, 'Logged in', '');
+
+    loadOrders();
+    loadUsers();
+    loadActivity();
+    setInterval(loadOrders, 30000);
+}
+
+// ============================================================
+// LOGOUT FUNCTION
+// ============================================================
+function logout() {
+    if (currentUser) {
+        logActivity(currentUser.username, 'Logged out', '');
+    }
+    if (confirm('Are you sure you want to logout?')) {
+        currentUser = null;
+        document.getElementById('dashboardPage').style.display = 'none';
+        document.getElementById('loginPage').style.display = 'block';
+        document.getElementById('loginPassword').value = '';
+    }
+}
+
+// ============================================================
+// USER MANAGEMENT FUNCTIONS (Admin Only)
+// ============================================================
+function loadUsers() {
+    var users = getUsers();
+    var tbody = document.getElementById('usersTableBody');
+
+    if (!tbody) return;
+
+    if (users.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="6" style="text-align: center; padding: 30px; color: #95a5a6;">
+                    No users yet. Create one from the login page.
+                </td>
+            </tr>
+        `;
+        return;
+    }
+
+    var html = '';
+    users.forEach(function(user, index) {
+        var statusColor = user.status === 'active' ? '#27ae60' : '#e74c3c';
+        var statusText = user.status === 'active' ? '✅ Active' : '❌ Inactive';
+        html += `
+            <tr>
+                <td>${index + 1}</td>
+                <td>${user.fullName || user.username}</td>
+                <td>${user.username}</td>
+                <td>${user.role || 'staff'}</td>
+                <td style="color: ${statusColor};">${statusText}</td>
+                <td class="user-actions">
+                    ${user.username !== 'admin' ? `
+                        <button class="delete-user" onclick="deleteUser('${user.username}')">Delete</button>
+                        <button class="reset-pw" onclick="resetPassword('${user.username}')">Reset</button>
+                    ` : `
+                        <span style="color: #95a5a6; font-size: 0.8em;">Protected</span>
+                    `}
+                </td>
+            </tr>
+        `;
+    });
+    tbody.innerHTML = html;
+}
+
+function deleteUser(username) {
+    if (!currentUser || currentUser.role !== 'admin') {
+        alert('Only admin can delete users.');
+        return;
+    }
+    if (username === 'admin') {
+        alert('Cannot delete the main admin account.');
+        return;
+    }
+    if (confirm('Delete user "' + username + '"?')) {
+        var users = getUsers();
+        users = users.filter(function(u) { return u.username !== username; });
+        saveUsers(users);
+        logActivity(currentUser.username, 'Deleted user', username);
+        loadUsers();
+        showNotification('🗑️ User "' + username + '" deleted');
+    }
+}
+
+function resetPassword(username) {
+    if (!currentUser || currentUser.role !== 'admin') {
+        alert('Only admin can reset passwords.');
+        return;
+    }
+    if (username === 'admin') {
+        alert('Admin password cannot be reset from here.');
+        return;
+    }
+    var newPassword = prompt('Enter new password for "' + username + '":');
+    if (newPassword && newPassword.length >= 6) {
+        var users = getUsers();
+        var user = users.find(function(u) { return u.username === username; });
+        if (user) {
+            user.password = newPassword;
+            saveUsers(users);
+            logActivity(currentUser.username, 'Reset password', username);
+            loadUsers();
+            showNotification('✅ Password reset for "' + username + '"');
+        }
+    } else if (newPassword !== null) {
+        alert('Password must be at least 6 characters.');
+    }
+}
+
+// ============================================================
+// ACTIVITY LOG
+// ============================================================
+function loadActivity() {
+    var activities = getActivity();
+    var container = document.getElementById('activityContainer');
+
+    if (!container) return;
+
+    if (activities.length === 0) {
+        container.innerHTML = `
+            <div class="empty">
+                <i class="fas fa-clipboard-list"></i>
+                <p>No activity yet</p>
+            </div>
+        `;
+        return;
+    }
+
+    var html = '';
+    activities.forEach(function(activity) {
+        html += `
+            <div class="activity-item">
+                <div>
+                    <span class="activity-user">👤 ${activity.username}</span>
+                    <span class="activity-action">${activity.action}</span>
+                    ${activity.details ? <span class="activity-order">${activity.details}</span> : ''}
+                </div>
+                <span class="activity-time">${activity.time}</span>
+            </div>
+        `;
+    });
+    container.innerHTML = html;
+}
         // ============================================================
         // 1. LOAD ORDERS
         // ============================================================
+
         let allOrders = [];
         let previousOrderCount = 0;
 
@@ -663,8 +1124,11 @@
         // ============================================================
         // 11. AUTO-REFRESH
         // ============================================================
-        loadOrders();
-        setInterval(loadOrders, 30000);
+     // ============================================================
+// 12. START - Check if user is already logged in
+// ============================================================
+// Start with login page visible, dashboard hidden
+// (This is already set in HTML with style="display: none;")
     </script>
 
 </body>
