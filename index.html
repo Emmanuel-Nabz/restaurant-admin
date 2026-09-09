@@ -906,71 +906,77 @@
         var currentUser = null;
 
         function login() {
-            console.log("✅ Login function called!");
-            
-            var username = document.getElementById('loginUsername').value.trim();
-            var password = document.getElementById('loginPassword').value.trim();
-            var errorEl = document.getElementById('loginError');
+    alert("Step 1: Login function called!");
+    
+    var username = document.getElementById('loginUsername').value.trim();
+    var password = document.getElementById('loginPassword').value.trim();
+    var errorEl = document.getElementById('loginError');
 
-            console.log("✅ Username:", username);
-            console.log("✅ Password:", password);
+    alert("Step 2: Username: " + username + ", Password: " + password);
 
-            errorEl.textContent = '';
+    errorEl.textContent = '';
 
-            if (!username || !password) {
-                errorEl.textContent = '❌ Please enter username and password.';
-                return;
+    if (!username || !password) {
+        alert("Step 3: Empty fields!");
+        errorEl.textContent = '❌ Please enter username and password.';
+        return;
+    }
+
+    alert("Step 4: Getting users from localStorage...");
+    var users = getUsers();
+    alert("Step 5: Users found: " + users.length);
+
+    var user = users.find(function(u) {
+        return u.username === username && u.password === password && u.status === 'active';
+    });
+
+    alert("Step 6: User found: " + (user ? user.username : "None"));
+
+    if (!user) {
+        alert("Step 7: User not found, checking for default admin...");
+        if (username === 'admin' && password === 'admin123') {
+            var existing = users.find(function(u) { return u.username === 'admin'; });
+            if (!existing) {
+                users.push({
+                    fullName: 'Administrator',
+                    username: 'admin',
+                    password: 'admin123',
+                    role: 'admin',
+                    status: 'active',
+                    created: new Date().toLocaleString()
+                });
+                saveUsers(users);
+                alert("Step 8: Admin account created!");
+                user = { fullName: 'Administrator', username: 'admin', role: 'admin' };
+            } else {
+                alert("Step 8: Admin already exists");
+                user = existing;
             }
-
-            var users = getUsers();
-            console.log("✅ Users found:", users.length);
-
-            var user = users.find(function(u) {
-                return u.username === username && u.password === password && u.status === 'active';
-            });
-
-            console.log("✅ User found:", user);
-
-            if (!user) {
-                if (username === 'admin' && password === 'admin123') {
-                    var existing = users.find(function(u) { return u.username === 'admin'; });
-                    if (!existing) {
-                        users.push({
-                            fullName: 'Administrator',
-                            username: 'admin',
-                            password: 'admin123',
-                            role: 'admin',
-                            status: 'active',
-                            created: new Date().toLocaleString()
-                        });
-                        saveUsers(users);
-                        console.log('✅ Admin account created!');
-                        user = { fullName: 'Administrator', username: 'admin', role: 'admin' };
-                    } else {
-                        user = existing;
-                    }
-                } else {
-                    errorEl.textContent = '❌ Invalid username or password.';
-                    return;
-                }
-            }
-
-            currentUser = user;
-            console.log("✅ Logged in as:", currentUser.username);
-
-            document.getElementById('loginPage').style.display = 'none';
-            document.getElementById('dashboardPage').style.display = 'block';
-            document.getElementById('currentUser').textContent = '👤 ' + user.username;
-            document.getElementById('userRole').textContent = user.role || 'Staff';
-
-            logActivity(user.username, 'Logged in', '');
-
-            loadOrders();
-            loadUsers();
-            loadActivity();
-            setInterval(loadOrders, 30000);
+        } else {
+            alert("Step 8: Invalid login");
+            errorEl.textContent = '❌ Invalid username or password.';
+            return;
         }
+    }
 
+    alert("Step 9: Login successful! Logging in as: " + user.username);
+
+    currentUser = user;
+
+    document.getElementById('loginPage').style.display = 'none';
+    document.getElementById('dashboardPage').style.display = 'block';
+    document.getElementById('currentUser').textContent = '👤 ' + user.username;
+    document.getElementById('userRole').textContent = user.role || 'Staff';
+
+    logActivity(user.username, 'Logged in', '');
+
+    loadOrders();
+    loadUsers();
+    loadActivity();
+    setInterval(loadOrders, 30000);
+    
+    alert("Step 10: Dashboard should be visible now!");
+}
         // ============================================================
         // 4. LOGOUT FUNCTION
         // ============================================================
