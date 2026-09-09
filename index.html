@@ -3,604 +3,130 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🍕 Admin Login</title>
+    <title>🍕 Admin Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        body {
-            background: #f0f2f5;
-            padding: 20px;
-            max-width: 1000px;
-            margin: 0 auto;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background: #f0f2f5; padding: 20px; max-width: 1000px; margin: 0 auto; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+        .login-container { background: white; padding: 40px 35px; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.15); max-width: 420px; width: 100%; text-align: center; }
+        .login-container h1 { font-size: 2em; color: #2c3e50; margin-bottom: 5px; }
+        .login-container h1 i { color: #e67e22; }
+        .login-container .subtitle { color: #7f8c8d; margin-bottom: 25px; font-size: 0.95em; }
+        .login-container .form-group { margin-bottom: 18px; text-align: left; }
+        .login-container .form-group label { display: block; font-weight: 600; color: #2c3e50; margin-bottom: 5px; font-size: 0.9em; }
+        .login-container .form-group input { width: 100%; padding: 12px 16px; border: 2px solid #ddd; border-radius: 10px; font-size: 1em; transition: border-color 0.3s; }
+        .login-container .form-group input:focus { border-color: #3498db; outline: none; }
+        .login-btn { width: 100%; padding: 14px; background: #e67e22; color: white; border: none; border-radius: 10px; font-size: 1.1em; font-weight: bold; cursor: pointer; transition: background 0.3s; margin-top: 5px; }
+        .login-btn:hover { background: #d35400; }
+        .login-btn i { margin-right: 8px; }
+        .login-btn.secondary { background: #3498db; }
+        .login-btn.secondary:hover { background: #2980b9; }
+        .login-container .demo-info { margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 10px; font-size: 0.85em; color: #7f8c8d; text-align: left; }
+        .login-container .demo-info strong { color: #2c3e50; }
+        .login-container .error-msg { color: #e74c3c; font-size: 0.9em; min-height: 30px; margin-top: 10px; }
+        .login-container .success-msg { color: #27ae60; font-size: 0.9em; min-height: 30px; margin-top: 10px; }
+        .login-container .switch-link { color: #3498db; cursor: pointer; font-weight: 600; }
+        .login-container .switch-link:hover { text-decoration: underline; }
 
-        /* ===== LOGIN PAGE ===== */
-        .login-container {
-            background: white;
-            padding: 40px 35px;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-            max-width: 420px;
-            width: 100%;
-            text-align: center;
-        }
-        .login-container h1 {
-            font-size: 2em;
-            color: #2c3e50;
-            margin-bottom: 5px;
-        }
-        .login-container h1 i {
-            color: #e67e22;
-        }
-        .login-container .subtitle {
-            color: #7f8c8d;
-            margin-bottom: 25px;
-            font-size: 0.95em;
-        }
-        .login-container .form-group {
-            margin-bottom: 18px;
-            text-align: left;
-        }
-        .login-container .form-group label {
-            display: block;
-            font-weight: 600;
-            color: #2c3e50;
-            margin-bottom: 5px;
-            font-size: 0.9em;
-        }
-        .login-container .form-group input {
-            width: 100%;
-            padding: 12px 16px;
-            border: 2px solid #ddd;
-            border-radius: 10px;
-            font-size: 1em;
-            transition: border-color 0.3s;
-        }
-        .login-container .form-group input:focus {
-            border-color: #3498db;
-            outline: none;
-        }
-        .login-btn {
-            width: 100%;
-            padding: 14px;
-            background: #e67e22;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 1.1em;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background 0.3s;
-            margin-top: 5px;
-        }
-        .login-btn:hover {
-            background: #d35400;
-        }
-        .login-btn i {
-            margin-right: 8px;
-        }
-        .login-btn.secondary {
-            background: #3498db;
-        }
-        .login-btn.secondary:hover {
-            background: #2980b9;
-        }
-        .login-container .demo-info {
-            margin-top: 20px;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            font-size: 0.85em;
-            color: #7f8c8d;
-            text-align: left;
-        }
-        .login-container .demo-info strong {
-            color: #2c3e50;
-        }
-        .login-container .error-msg {
-            color: #e74c3c;
-            font-size: 0.9em;
-            min-height: 30px;
-            margin-top: 10px;
-        }
-        .login-container .success-msg {
-            color: #27ae60;
-            font-size: 0.9em;
-            min-height: 30px;
-            margin-top: 10px;
-        }
-        .login-container .switch-link {
-            color: #3498db;
-            cursor: pointer;
-            font-weight: 600;
-        }
-        .login-container .switch-link:hover {
-            text-decoration: underline;
-        }
+        .dashboard { display: none; width: 100%; }
+        .header { text-align: center; padding: 20px 0; border-bottom: 4px solid #e67e22; margin-bottom: 30px; background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        .header .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 0 20px; flex-wrap: wrap; gap: 10px; }
+        .header h1 { font-size: 1.8em; color: #2c3e50; }
+        .header .user-info { display: flex; align-items: center; gap: 15px; flex-wrap: wrap; }
+        .header .user-info span { color: #2c3e50; font-weight: 600; }
+        .header .user-info .badge { background: #e67e22; color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.7em; }
+        .header .logout-btn { background: #e74c3c; color: white; border: none; padding: 8px 18px; border-radius: 20px; cursor: pointer; font-weight: 600; transition: background 0.3s; }
+        .header .logout-btn:hover { background: #c0392b; }
+        .header .tabs { display: flex; gap: 10px; justify-content: center; margin-top: 15px; flex-wrap: wrap; }
+        .header .tab-btn { padding: 8px 20px; border: none; border-radius: 20px; cursor: pointer; font-weight: 600; background: #ecf0f1; color: #7f8c8d; transition: all 0.3s; }
+        .header .tab-btn.active { background: #e67e22; color: white; }
+        .header .tab-btn:hover { background: #e67e22; color: white; }
 
-        /* ===== DASHBOARD ===== */
-        .dashboard {
-            display: none;
-            width: 100%;
-        }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
 
-        .header {
-            text-align: center;
-            padding: 20px 0;
-            border-bottom: 4px solid #e67e22;
-            margin-bottom: 30px;
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-        }
-        .header .top-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 20px;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        .header h1 {
-            font-size: 1.8em;
-            color: #2c3e50;
-        }
-        .header .user-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-        .header .user-info span {
-            color: #2c3e50;
-            font-weight: 600;
-        }
-        .header .user-info .badge {
-            background: #e67e22;
-            color: white;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.7em;
-        }
-        .header .logout-btn {
-            background: #e74c3c;
-            color: white;
-            border: none;
-            padding: 8px 18px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: background 0.3s;
-        }
-        .header .logout-btn:hover {
-            background: #c0392b;
-        }
-        .header .tabs {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            margin-top: 15px;
-            flex-wrap: wrap;
-        }
-        .header .tab-btn {
-            padding: 8px 20px;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: 600;
-            background: #ecf0f1;
-            color: #7f8c8d;
-            transition: all 0.3s;
-        }
-        .header .tab-btn.active {
-            background: #e67e22;
-            color: white;
-        }
-        .header .tab-btn:hover {
-            background: #e67e22;
-            color: white;
-        }
+        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 30px; }
+        .stat-card { background: white; padding: 20px; border-radius: 12px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.08); transition: transform 0.3s; }
+        .stat-card:hover { transform: translateY(-5px); }
+        .stat-card .number { font-size: 2em; font-weight: bold; color: #e67e22; }
+        .stat-card .label { color: #7f8c8d; font-size: 0.85em; margin-top: 5px; }
+        .stat-card .number.green { color: #27ae60; }
+        .stat-card .number.red { color: #e74c3c; }
 
-        .tab-content {
-            display: none;
-        }
-        .tab-content.active {
-            display: block;
-        }
+        .filters { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; background: white; padding: 15px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.06); align-items: center; }
+        .filters input, .filters select { padding: 10px 14px; border: 2px solid #ddd; border-radius: 8px; font-size: 0.95em; flex: 1; min-width: 150px; transition: border-color 0.3s; background: white; }
+        .filters input:focus, .filters select:focus { border-color: #3498db; outline: none; }
 
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-        .stat-card {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            text-align: center;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-            transition: transform 0.3s;
-        }
-        .stat-card:hover {
-            transform: translateY(-5px);
-        }
-        .stat-card .number {
-            font-size: 2em;
-            font-weight: bold;
-            color: #e67e22;
-        }
-        .stat-card .label {
-            color: #7f8c8d;
-            font-size: 0.85em;
-            margin-top: 5px;
-        }
-        .stat-card .number.green {
-            color: #27ae60;
-        }
-        .stat-card .number.red {
-            color: #e74c3c;
-        }
+        .orders-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px; background: white; padding: 12px 18px; border-radius: 12px; }
+        .orders-header h2 { color: #2c3e50; font-size: 1.1em; }
+        .orders-header .actions { display: flex; gap: 10px; flex-wrap: wrap; }
+        .orders-header .btn { padding: 8px 16px; border: none; border-radius: 20px; cursor: pointer; font-weight: 600; font-size: 0.85em; transition: all 0.3s; }
+        .btn-refresh { background: #3498db; color: white; }
+        .btn-refresh:hover { background: #2980b9; }
+        .btn-export { background: #27ae60; color: white; }
+        .btn-export:hover { background: #1e8449; }
+        .btn-clear { background: #e74c3c; color: white; }
+        .btn-clear:hover { background: #c0392b; }
 
-        .filters {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 20px;
-            background: white;
-            padding: 15px;
-            border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
-            align-items: center;
-        }
-        .filters input,
-        .filters select {
-            padding: 10px 14px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-size: 0.95em;
-            flex: 1;
-            min-width: 150px;
-            transition: border-color 0.3s;
-            background: white;
-        }
-        .filters input:focus,
-        .filters select:focus {
-            border-color: #3498db;
-            outline: none;
-        }
+        .order-card { background: white; border-radius: 12px; padding: 16px 18px; margin-bottom: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.06); border-left: 4px solid #f39c12; transition: transform 0.2s, box-shadow 0.3s; }
+        .order-card:hover { transform: translateX(5px); box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+        .order-card.completed { border-left-color: #27ae60; }
+        .order-card.rejected { border-left-color: #e74c3c; opacity: 0.6; }
+        .order-card .order-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+        .order-card .order-id { font-weight: bold; color: #2c3e50; }
+        .order-card .order-status { font-size: 0.8em; padding: 4px 12px; border-radius: 20px; font-weight: 600; }
+        .order-card .order-status.pending { background: #f39c12; color: white; }
+        .order-card .order-status.completed { background: #27ae60; color: white; }
+        .order-card .order-status.rejected { background: #e74c3c; color: white; }
+        .order-card .order-details { margin: 8px 0; color: #555; font-size: 0.95em; }
+        .order-card .order-details i { width: 20px; color: #7f8c8d; }
+        .order-card .order-items { background: #f8f9fa; padding: 10px 12px; border-radius: 8px; margin: 8px 0; font-size: 0.9em; }
+        .order-card .order-total { font-weight: bold; color: #27ae60; font-size: 1.1em; }
+        .order-card .order-actions { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+        .order-card .btn { padding: 6px 18px; border: none; border-radius: 20px; cursor: pointer; font-weight: 600; font-size: 0.85em; transition: transform 0.2s; }
+        .order-card .btn:hover { transform: scale(1.05); }
+        .btn-accept { background: #27ae60; color: white; }
+        .btn-accept:hover { background: #1e8449; }
+        .btn-reject { background: #e74c3c; color: white; }
+        .btn-reject:hover { background: #c0392b; }
+        .btn-delete { background: #95a5a6; color: white; }
+        .btn-delete:hover { background: #7f8c8d; }
 
-        .orders-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-            gap: 10px;
-            background: white;
-            padding: 12px 18px;
-            border-radius: 12px;
-        }
-        .orders-header h2 {
-            color: #2c3e50;
-            font-size: 1.1em;
-        }
-        .orders-header .actions {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-        .orders-header .btn {
-            padding: 8px 16px;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.85em;
-            transition: all 0.3s;
-        }
-        .btn-refresh {
-            background: #3498db;
-            color: white;
-        }
-        .btn-refresh:hover {
-            background: #2980b9;
-        }
-        .btn-export {
-            background: #27ae60;
-            color: white;
-        }
-        .btn-export:hover {
-            background: #1e8449;
-        }
-        .btn-clear {
-            background: #e74c3c;
-            color: white;
-        }
-        .btn-clear:hover {
-            background: #c0392b;
-        }
+        .empty { text-align: center; color: #95a5a6; padding: 60px 0; }
+        .empty i { font-size: 4em; margin-bottom: 15px; }
 
-        .order-card {
-            background: white;
-            border-radius: 12px;
-            padding: 16px 18px;
-            margin-bottom: 12px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
-            border-left: 4px solid #f39c12;
-            transition: transform 0.2s, box-shadow 0.3s;
-        }
-        .order-card:hover {
-            transform: translateX(5px);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        }
-        .order-card.completed {
-            border-left-color: #27ae60;
-        }
-        .order-card.rejected {
-            border-left-color: #e74c3c;
-            opacity: 0.6;
-        }
-        .order-card .order-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-        .order-card .order-id {
-            font-weight: bold;
-            color: #2c3e50;
-        }
-        .order-card .order-status {
-            font-size: 0.8em;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-weight: 600;
-        }
-        .order-card .order-status.pending {
-            background: #f39c12;
-            color: white;
-        }
-        .order-card .order-status.completed {
-            background: #27ae60;
-            color: white;
-        }
-        .order-card .order-status.rejected {
-            background: #e74c3c;
-            color: white;
-        }
-        .order-card .order-details {
-            margin: 8px 0;
-            color: #555;
-            font-size: 0.95em;
-        }
-        .order-card .order-details i {
-            width: 20px;
-            color: #7f8c8d;
-        }
-        .order-card .order-items {
-            background: #f8f9fa;
-            padding: 10px 12px;
-            border-radius: 8px;
-            margin: 8px 0;
-            font-size: 0.9em;
-        }
-        .order-card .order-total {
-            font-weight: bold;
-            color: #27ae60;
-            font-size: 1.1em;
-        }
-        .order-card .order-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 12px;
-            flex-wrap: wrap;
-        }
-        .order-card .btn {
-            padding: 6px 18px;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.85em;
-            transition: transform 0.2s;
-        }
-        .order-card .btn:hover {
-            transform: scale(1.05);
-        }
-        .btn-accept {
-            background: #27ae60;
-            color: white;
-        }
-        .btn-accept:hover {
-            background: #1e8449;
-        }
-        .btn-reject {
-            background: #e74c3c;
-            color: white;
-        }
-        .btn-reject:hover {
-            background: #c0392b;
-        }
-        .btn-delete {
-            background: #95a5a6;
-            color: white;
-        }
-        .btn-delete:hover {
-            background: #7f8c8d;
-        }
+        .back-link { display: inline-block; margin-top: 20px; color: #3498db; text-decoration: none; font-weight: 600; background: white; padding: 10px 20px; border-radius: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.06); transition: all 0.3s; }
+        .back-link:hover { text-decoration: underline; background: #f8f9fa; transform: translateX(-5px); }
 
-        .empty {
-            text-align: center;
-            color: #95a5a6;
-            padding: 60px 0;
-        }
-        .empty i {
-            font-size: 4em;
-            margin-bottom: 15px;
-        }
+        .notification { position: fixed; top: 20px; right: 20px; background: #27ae60; color: white; padding: 15px 25px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); z-index: 9999; animation: slideIn 0.5s ease; font-weight: bold; }
+        .notification i { margin-right: 10px; }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 
-        .back-link {
-            display: inline-block;
-            margin-top: 20px;
-            color: #3498db;
-            text-decoration: none;
-            font-weight: 600;
-            background: white;
-            padding: 10px 20px;
-            border-radius: 30px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
-            transition: all 0.3s;
-        }
-        .back-link:hover {
-            text-decoration: underline;
-            background: #f8f9fa;
-            transform: translateX(-5px);
-        }
+        .users-list { background: white; border-radius: 12px; padding: 20px; overflow-x: auto; }
+        .users-list table { width: 100%; border-collapse: collapse; }
+        .users-list th { text-align: left; padding: 12px 10px; border-bottom: 2px solid #ecf0f1; color: #2c3e50; }
+        .users-list td { padding: 10px; border-bottom: 1px solid #ecf0f1; color: #555; }
+        .users-list .user-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+        .users-list .user-actions button { padding: 4px 12px; border: none; border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 0.8em; }
+        .users-list .user-actions .delete-user { background: #e74c3c; color: white; }
+        .users-list .user-actions .delete-user:hover { background: #c0392b; }
+        .users-list .user-actions .reset-pw { background: #f39c12; color: white; }
+        .users-list .user-actions .reset-pw:hover { background: #d68910; }
 
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: #27ae60;
-            color: white;
-            padding: 15px 25px;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            z-index: 9999;
-            animation: slideIn 0.5s ease;
-            font-weight: bold;
-        }
-        .notification i {
-            margin-right: 10px;
-        }
-
-        @keyframes slideIn {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-
-        .users-list {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            overflow-x: auto;
-        }
-        .users-list table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .users-list th {
-            text-align: left;
-            padding: 12px 10px;
-            border-bottom: 2px solid #ecf0f1;
-            color: #2c3e50;
-        }
-        .users-list td {
-            padding: 10px;
-            border-bottom: 1px solid #ecf0f1;
-            color: #555;
-        }
-        .users-list .user-actions {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-        .users-list .user-actions button {
-            padding: 4px 12px;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.8em;
-        }
-        .users-list .user-actions .delete-user {
-            background: #e74c3c;
-            color: white;
-        }
-        .users-list .user-actions .delete-user:hover {
-            background: #c0392b;
-        }
-        .users-list .user-actions .reset-pw {
-            background: #f39c12;
-            color: white;
-        }
-        .users-list .user-actions .reset-pw:hover {
-            background: #d68910;
-        }
-
-        .activity-item {
-            background: white;
-            border-radius: 10px;
-            padding: 12px 16px;
-            margin-bottom: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 8px;
-            border-left: 3px solid #3498db;
-        }
-        .activity-item .activity-user {
-            font-weight: 600;
-            color: #2c3e50;
-        }
-        .activity-item .activity-action {
-            color: #555;
-        }
-        .activity-item .activity-time {
-            color: #95a5a6;
-            font-size: 0.8em;
-        }
-        .activity-item .activity-order {
-            color: #e67e22;
-            font-weight: 600;
-        }
+        .activity-item { background: white; border-radius: 10px; padding: 12px 16px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; border-left: 3px solid #3498db; }
+        .activity-item .activity-user { font-weight: 600; color: #2c3e50; }
+        .activity-item .activity-action { color: #555; }
+        .activity-item .activity-time { color: #95a5a6; font-size: 0.8em; }
+        .activity-item .activity-order { color: #e67e22; font-weight: 600; }
 
         @media (max-width: 600px) {
-            .stats {
-                grid-template-columns: 1fr 1fr;
-            }
-            .order-card .order-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 5px;
-            }
-            .filters {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            .filters input,
-            .filters select {
-                min-width: unset;
-            }
-            .orders-header {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            .header .top-bar {
-                flex-direction: column;
-                align-items: stretch;
-                text-align: center;
-            }
-            .header .user-info {
-                justify-content: center;
-            }
+            .stats { grid-template-columns: 1fr 1fr; }
+            .order-card .order-header { flex-direction: column; align-items: flex-start; gap: 5px; }
+            .filters { flex-direction: column; align-items: stretch; }
+            .filters input, .filters select { min-width: unset; }
+            .orders-header { flex-direction: column; align-items: stretch; }
+            .header .top-bar { flex-direction: column; align-items: stretch; text-align: center; }
+            .header .user-info { justify-content: center; }
         }
     </style>
 </head>
@@ -611,7 +137,6 @@
         <h1><i class="fas fa-utensils"></i> Nabz-Tech Eats</h1>
         <p class="subtitle">Restaurant Admin Login</p>
 
-        <!-- Login Form -->
         <div id="loginForm">
             <div class="form-group">
                 <label><i class="fas fa-user"></i> Username</label>
@@ -621,17 +146,12 @@
                 <label><i class="fas fa-lock"></i> Password</label>
                 <input type="password" id="loginPassword" placeholder="Enter password" value="admin123">
             </div>
-            <button class="login-btn" onclick="login()">
-                <i class="fas fa-sign-in-alt"></i> Login
-            </button>
-            <p style="margin-top: 12px; font-size: 0.9em;">
-                Don't have an account? <span class="switch-link" onclick="showRegister()">Create Account</span>
-            </p>
+            <button class="login-btn" onclick="login()"><i class="fas fa-sign-in-alt"></i> Login</button>
+            <p style="margin-top:12px;font-size:0.9em;">Don't have an account? <span class="switch-link" onclick="showRegister()">Create Account</span></p>
             <div id="loginError" class="error-msg"></div>
         </div>
 
-        <!-- Register Form -->
-        <div id="registerForm" style="display: none;">
+        <div id="registerForm" style="display:none;">
             <div class="form-group">
                 <label><i class="fas fa-user"></i> Full Name</label>
                 <input type="text" id="regFullName" placeholder="Enter full name">
@@ -648,12 +168,8 @@
                 <label><i class="fas fa-lock"></i> Confirm Password</label>
                 <input type="password" id="regConfirmPassword" placeholder="Confirm password">
             </div>
-            <button class="login-btn secondary" onclick="registerUser()">
-                <i class="fas fa-user-plus"></i> Create Account
-            </button>
-            <p style="margin-top: 12px; font-size: 0.9em;">
-                Already have an account? <span class="switch-link" onclick="showLogin()">Login</span>
-            </p>
+            <button class="login-btn secondary" onclick="registerUser()"><i class="fas fa-user-plus"></i> Create Account</button>
+            <p style="margin-top:12px;font-size:0.9em;">Already have an account? <span class="switch-link" onclick="showLogin()">Login</span></p>
             <div id="registerError" class="error-msg"></div>
             <div id="registerSuccess" class="success-msg"></div>
         </div>
@@ -674,49 +190,29 @@
                 <div class="user-info">
                     <span id="currentUser">👤 admin</span>
                     <span class="badge" id="userRole">Admin</span>
-                    <button class="logout-btn" onclick="logout()">
-                        <i class="fas fa-sign-out-alt"></i> Logout
-                    </button>
+                    <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
                 </div>
             </div>
             <div class="tabs">
-                <button class="tab-btn active" onclick="switchTab('orders')" id="tabOrders">
-                    📋 Orders
-                </button>
-                <button class="tab-btn" onclick="switchTab('users')" id="tabUsers">
-                    👥 Users
-                </button>
-                <button class="tab-btn" onclick="switchTab('activity')" id="tabActivity">
-                    📜 Activity Log
-                </button>
+                <button class="tab-btn active" onclick="switchTab('orders')" id="tabOrders">📋 Orders</button>
+                <button class="tab-btn" onclick="switchTab('users')" id="tabUsers">👥 Users</button>
+                <button class="tab-btn" onclick="switchTab('activity')" id="tabActivity">📜 Activity Log</button>
             </div>
         </div>
 
         <!-- ===== TAB 1: ORDERS ===== -->
         <div id="tabOrdersContent" class="tab-content active">
             <div class="stats">
-                <div class="stat-card">
-                    <div class="number" id="totalOrders">0</div>
-                    <div class="label">📊 Total Orders</div>
-                </div>
-                <div class="stat-card">
-                    <div class="number green" id="pendingOrders">0</div>
-                    <div class="label">⏳ Pending</div>
-                </div>
-                <div class="stat-card">
-                    <div class="number" id="completedOrders">0</div>
-                    <div class="label">✅ Completed</div>
-                </div>
-                <div class="stat-card">
-                    <div class="number green" id="totalRevenue">BD 0</div>
-                    <div class="label">💰 Revenue</div>
-                </div>
+                <div class="stat-card"><div class="number" id="totalOrders">0</div><div class="label">📊 Total Orders</div></div>
+                <div class="stat-card"><div class="number green" id="pendingOrders">0</div><div class="label">⏳ Pending</div></div>
+                <div class="stat-card"><div class="number" id="completedOrders">0</div><div class="label">✅ Completed</div></div>
+                <div class="stat-card"><div class="number green" id="totalRevenue">BD 0</div><div class="label">💰 Revenue</div></div>
             </div>
 
             <div class="filters">
                 <input type="text" id="searchInput" placeholder="🔍 Search by name or order #..." oninput="applyFilters()">
                 <input type="date" id="dateFrom" onchange="applyFilters()">
-                <span style="color: #7f8c8d;">to</span>
+                <span style="color:#7f8c8d;">to</span>
                 <input type="date" id="dateTo" onchange="applyFilters()">
                 <select id="statusFilter" onchange="applyFilters()">
                     <option value="all">📋 All Status</option>
@@ -729,52 +225,24 @@
             <div class="orders-header">
                 <h2>📋 Orders (<span id="orderCount">0</span>)</h2>
                 <div class="actions">
-                    <button class="btn btn-refresh" onclick="loadOrders()">
-                        <i class="fas fa-sync"></i> Refresh
-                    </button>
-                    <button class="btn btn-export" onclick="exportCSV()">
-                        <i class="fas fa-download"></i> Export CSV
-                    </button>
-                    <button class="btn btn-clear" onclick="clearAllOrders()">
-                        <i class="fas fa-trash"></i> Clear All
-                    </button>
+                    <button class="btn btn-refresh" onclick="loadOrders()"><i class="fas fa-sync"></i> Refresh</button>
+                    <button class="btn btn-export" onclick="exportCSV()"><i class="fas fa-download"></i> Export CSV</button>
+                    <button class="btn btn-clear" onclick="clearAllOrders()"><i class="fas fa-trash"></i> Clear All</button>
                 </div>
             </div>
-            <div id="ordersContainer">
-                <div class="empty">
-                    <i class="fas fa-inbox"></i>
-                    <p>No orders yet</p>
-                </div>
-            </div>
+            <div id="ordersContainer"><div class="empty"><i class="fas fa-inbox"></i><p>No orders yet</p></div></div>
         </div>
 
         <!-- ===== TAB 2: USERS ===== -->
         <div id="tabUsersContent" class="tab-content">
             <div class="orders-header">
                 <h2>👥 Users</h2>
-                <button class="btn btn-refresh" onclick="loadUsers()">
-                    <i class="fas fa-sync"></i> Refresh
-                </button>
+                <button class="btn btn-refresh" onclick="loadUsers()"><i class="fas fa-sync"></i> Refresh</button>
             </div>
             <div id="usersContainer" class="users-list">
                 <table>
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Full Name</th>
-                            <th>Username</th>
-                            <th>Role</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="usersTableBody">
-                        <tr>
-                            <td colspan="6" style="text-align: center; padding: 30px; color: #95a5a6;">
-                                No users yet. Create one from the login page.
-                            </td>
-                        </tr>
-                    </tbody>
+                    <thead><tr><th>#</th><th>Full Name</th><th>Username</th><th>Role</th><th>Status</th><th>Actions</th></tr></thead>
+                    <tbody id="usersTableBody"></tbody>
                 </table>
             </div>
         </div>
@@ -783,586 +251,14 @@
         <div id="tabActivityContent" class="tab-content">
             <div class="orders-header">
                 <h2>📜 Activity Log</h2>
-                <button class="btn btn-refresh" onclick="loadActivity()">
-                    <i class="fas fa-sync"></i> Refresh
-                </button>
+                <button class="btn btn-refresh" onclick="loadActivity()"><i class="fas fa-sync"></i> Refresh</button>
             </div>
-            <div id="activityContainer">
-                <div class="empty">
-                    <i class="fas fa-clipboard-list"></i>
-                    <p>No activity yet</p>
-                </div>
-            </div>
+            <div id="activityContainer"><div class="empty"><i class="fas fa-clipboard-list"></i><p>No activity yet</p></div></div>
         </div>
 
-        <a href="https://emmanuel-nabz.github.io/restaurant-app/" class="back-link">
-            🏠 Back to Customer App
-        </a>
+        <a href="https://emmanuel-nabz.github.io/restaurant-app/" class="back-link">🏠 Back to Customer App</a>
     </div>
 
-    <script>
-        // ============================================================
-        // 1. USER MANAGEMENT
-        // ============================================================
-        function getUsers() {
-            return JSON.parse(localStorage.getItem('nabzUsers')) || [];
-        }
-
-        function saveUsers(users) {
-            localStorage.setItem('nabzUsers', JSON.stringify(users));
-        }
-
-        function getActivity() {
-            return JSON.parse(localStorage.getItem('nabzActivity')) || [];
-        }
-
-        function saveActivity(activity) {
-            localStorage.setItem('nabzActivity', JSON.stringify(activity));
-        }
-
-        function logActivity(username, action, details) {
-            var activity = getActivity();
-            activity.unshift({
-                username: username,
-                action: action,
-                details: details || '',
-                time: new Date().toLocaleString()
-            });
-            saveActivity(activity);
-        }
-
-        // ============================================================
-        // 2. SHOW/HIDE FORMS
-        // ============================================================
-        function showRegister() {
-            document.getElementById('loginForm').style.display = 'none';
-            document.getElementById('registerForm').style.display = 'block';
-            document.getElementById('loginError').textContent = '';
-            document.getElementById('registerError').textContent = '';
-            document.getElementById('registerSuccess').textContent = '';
-        }
-
-        function showLogin() {
-            document.getElementById('loginForm').style.display = 'block';
-            document.getElementById('registerForm').style.display = 'none';
-            document.getElementById('loginError').textContent = '';
-            document.getElementById('registerError').textContent = '';
-            document.getElementById('registerSuccess').textContent = '';
-        }
-
-        // ============================================================
-        // 3. REGISTER USER
-        // ============================================================
-        function registerUser() {
-            var fullName = document.getElementById('regFullName').value.trim();
-            var username = document.getElementById('regUsername').value.trim();
-            var password = document.getElementById('regPassword').value;
-            var confirmPassword = document.getElementById('regConfirmPassword').value;
-            var errorEl = document.getElementById('registerError');
-            var successEl = document.getElementById('registerSuccess');
-
-            errorEl.textContent = '';
-            successEl.textContent = '';
-
-            if (!fullName) { errorEl.textContent = '❌ Please enter your full name.'; return; }
-            if (!username) { errorEl.textContent = '❌ Please choose a username.'; return; }
-            if (username.length < 3) { errorEl.textContent = '❌ Username must be at least 3 characters.'; return; }
-            if (!password) { errorEl.textContent = '❌ Please choose a password.'; return; }
-            if (password.length < 6) { errorEl.textContent = '❌ Password must be at least 6 characters.'; return; }
-            if (password !== confirmPassword) { errorEl.textContent = '❌ Passwords do not match.'; return; }
-
-            var users = getUsers();
-            if (users.find(function(u) { return u.username === username; })) {
-                errorEl.textContent = '❌ Username already exists. Please choose another.';
-                return;
-            }
-
-            users.push({
-                fullName: fullName,
-                username: username,
-                password: password,
-                role: 'staff',
-                status: 'active',
-                created: new Date().toLocaleString()
-            });
-            saveUsers(users);
-
-            successEl.textContent = '✅ Account created successfully! You can now login.';
-            document.getElementById('regFullName').value = '';
-            document.getElementById('regUsername').value = '';
-            document.getElementById('regPassword').value = '';
-            document.getElementById('regConfirmPassword').value = '';
-
-            setTimeout(function() {
-                showLogin();
-                successEl.textContent = '';
-            }, 2000);
-        }
-
-        // ============================================================
-        // 4. LOGIN
-        // ============================================================
-        var currentUser = null;
-
-        function login() {
-            console.log("✅ Login function called!");
-            
-            var username = document.getElementById('loginUsername').value.trim();
-            var password = document.getElementById('loginPassword').value.trim();
-            var errorEl = document.getElementById('loginError');
-
-            errorEl.textContent = '';
-
-            if (!username || !password) {
-                errorEl.textContent = '❌ Please enter username and password.';
-                return;
-            }
-
-            var users = getUsers();
-            console.log("👥 Users found:", users.length);
-
-            var user = users.find(function(u) {
-                return u.username === username && u.password === password && u.status === 'active';
-            });
-
-            if (!user) {
-                // Check for default admin
-                if (username === 'admin' && password === 'admin123') {
-                    var existing = users.find(function(u) { return u.username === 'admin'; });
-                    if (!existing) {
-                        users.push({
-                            fullName: 'Administrator',
-                            username: 'admin',
-                            password: 'admin123',
-                            role: 'admin',
-                            status: 'active',
-                            created: new Date().toLocaleString()
-                        });
-                        saveUsers(users);
-                        console.log("✅ Admin account created!");
-                        user = { fullName: 'Administrator', username: 'admin', role: 'admin' };
-                    } else {
-                        user = existing;
-                    }
-                } else {
-                    errorEl.textContent = '❌ Invalid username or password.';
-                    return;
-                }
-            }
-
-            currentUser = user;
-            console.log("✅ Logged in as:", currentUser.username);
-
-            document.getElementById('loginPage').style.display = 'none';
-            document.getElementById('dashboardPage').style.display = 'block';
-            document.getElementById('currentUser').textContent = '👤 ' + user.username;
-            document.getElementById('userRole').textContent = user.role || 'Staff';
-
-            logActivity(user.username, 'Logged in', '');
-
-            loadOrders();
-            loadUsers();
-            loadActivity();
-            setInterval(loadOrders, 30000);
-        }
-
-        // ============================================================
-        // 5. LOGOUT
-        // ============================================================
-        function logout() {
-            if (currentUser) {
-                logActivity(currentUser.username, 'Logged out', '');
-            }
-            if (confirm('Are you sure you want to logout?')) {
-                currentUser = null;
-                document.getElementById('dashboardPage').style.display = 'none';
-                document.getElementById('loginPage').style.display = 'block';
-                document.getElementById('loginPassword').value = '';
-            }
-        }
-
-        // ============================================================
-        // 6. TAB SWITCHING
-        // ============================================================
-        function switchTab(tab) {
-            document.querySelectorAll('.tab-content').forEach(function(el) {
-                el.classList.remove('active');
-            });
-            document.querySelectorAll('.tab-btn').forEach(function(el) {
-                el.classList.remove('active');
-            });
-
-            document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1) + 'Content').classList.add('active');
-            document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add('active');
-        }
-
-        // ============================================================
-        // 7. LOAD ORDERS
-        // ============================================================
-        let allOrders = [];
-        let previousOrderCount = 0;
-
-        function loadOrders() {
-            allOrders = JSON.parse(localStorage.getItem('nabzOrders')) || [];
-
-            if (allOrders.length > previousOrderCount && currentUser) {
-                showNotification('🛎️ New order received!');
-                playSound();
-                logActivity(currentUser.username, 'New order received', 'Order #' + allOrders.length);
-            }
-            previousOrderCount = allOrders.length;
-
-            applyFilters();
-        }
-
-        function applyFilters() {
-            var search = document.getElementById('searchInput').value.toLowerCase();
-            var statusFilter = document.getElementById('statusFilter').value;
-            var dateFrom = document.getElementById('dateFrom').value;
-            var dateTo = document.getElementById('dateTo').value;
-
-            var filtered = allOrders.filter(function(order) {
-                var matchSearch = !search ||
-                    order.name.toLowerCase().includes(search) ||
-                    String(order.id).includes(search);
-
-                var matchStatus = statusFilter === 'all' || order.status === statusFilter;
-
-                var matchDate = true;
-                if (dateFrom || dateTo) {
-                    var orderDate = new Date(order.date).toISOString().split('T')[0];
-                    if (dateFrom && orderDate < dateFrom) matchDate = false;
-                    if (dateTo && orderDate > dateTo) matchDate = false;
-                }
-
-                return matchSearch && matchStatus && matchDate;
-            });
-
-            renderOrders(filtered);
-            updateStats(filtered);
-        }
-
-        function renderOrders(orders) {
-            var container = document.getElementById('ordersContainer');
-            document.getElementById('orderCount').textContent = orders.length;
-
-            if (orders.length === 0) {
-                container.innerHTML = `
-                    <div class="empty">
-                        <i class="fas fa-inbox"></i>
-                        <p>No orders found</p>
-                    </div>
-                `;
-                return;
-            }
-
-            var html = '';
-            orders.forEach(function(order, index) {
-                var statusClass = '';
-                var statusText = '';
-
-                if (order.status === 'Completed') {
-                    statusClass = 'completed';
-                    statusText = '✅ Completed';
-                } else if (order.status === 'Rejected') {
-                    statusClass = 'rejected';
-                    statusText = '❌ Rejected';
-                } else {
-                    statusClass = '';
-                    statusText = '⏳ Pending';
-                }
-
-                var originalIndex = allOrders.indexOf(order);
-
-                html += `
-                    <div class="order-card ${statusClass}">
-                        <div class="order-header">
-                            <span class="order-id">#${originalIndex + 1}</span>
-                            <span class="order-status ${order.status.toLowerCase()}">${statusText}</span>
-                        </div>
-                        <div class="order-details"><i class="fas fa-calendar"></i> ${order.date}</div>
-                        <div class="order-details"><i class="fas fa-user"></i> ${order.name}</div>
-                        <div class="order-details"><i class="fas fa-phone"></i> ${order.phone}</div>
-                        <div class="order-details"><i class="fas fa-map-pin"></i> ${order.address}</div>
-                        <div class="order-details"><i class="fas fa-credit-card"></i> ${order.payment}</div>
-                        <div class="order-items">
-                            ${order.items.map(function(item) {
-                                return item.quantity + 'x ' + item.name;
-                            }).join(', ')}
-                        </div>
-                        <div class="order-total">💰 Total: BD ${order.total.toFixed(2)}</div>
-
-                        <div class="order-actions">
-                            ${order.status === 'Pending' ? `
-                                <button class="btn btn-accept" onclick="updateOrderStatus(${originalIndex}, 'Completed')">✅ Accept</button>
-                                <button class="btn btn-reject" onclick="updateOrderStatus(${originalIndex}, 'Rejected')">❌ Reject</button>
-                            ` : `
-                                ${order.status === 'Completed' ? `
-                                    <span style="color: #27ae60; font-weight: bold;">✅ Order Completed</span>
-                                ` : `
-                                    <span style="color: #e74c3c; font-weight: bold;">❌ Order Rejected</span>
-                                `}
-                                <button class="btn btn-delete" onclick="deleteOrder(${originalIndex})">🗑️ Delete</button>
-                            `}
-                        </div>
-                    </div>
-                `;
-            });
-            container.innerHTML = html;
-        }
-
-        function updateStats(orders) {
-            var pending = orders.filter(function(o) { return o.status === 'Pending'; });
-            var completed = orders.filter(function(o) { return o.status === 'Completed'; });
-
-            document.getElementById('totalOrders').textContent = orders.length;
-            document.getElementById('pendingOrders').textContent = pending.length;
-            document.getElementById('completedOrders').textContent = completed.length;
-
-            var revenue = 0;
-            completed.forEach(function(o) { revenue += o.total; });
-            document.getElementById('totalRevenue').textContent = 'BD ' + revenue.toFixed(2);
-        }
-
-        // ============================================================
-        // 8. ORDER ACTIONS
-        // ============================================================
-        function updateOrderStatus(index, status) {
-            if (!currentUser) return;
-            var orders = JSON.parse(localStorage.getItem('nabzOrders')) || [];
-            if (index >= 0 && index < orders.length) {
-                orders[index].status = status;
-                localStorage.setItem('nabzOrders', JSON.stringify(orders));
-                logActivity(currentUser.username, 'Order ' + status, 'Order #' + (index + 1));
-                loadOrders();
-                showNotification('✅ Order #' + (index + 1) + ' updated to ' + status);
-            }
-        }
-
-        function deleteOrder(index) {
-            if (!currentUser) return;
-            if (confirm('Delete this order?')) {
-                var orders = JSON.parse(localStorage.getItem('nabzOrders')) || [];
-                if (index >= 0 && index < orders.length) {
-                    orders.splice(index, 1);
-                    localStorage.setItem('nabzOrders', JSON.stringify(orders));
-                    logActivity(currentUser.username, 'Deleted order', 'Order #' + (index + 1));
-                    loadOrders();
-                    showNotification('🗑️ Order #' + (index + 1) + ' deleted');
-                }
-            }
-        }
-
-        function clearAllOrders() {
-            if (!currentUser) return;
-            if (confirm('Delete ALL orders? This cannot be undone!')) {
-                localStorage.removeItem('nabzOrders');
-                logActivity(currentUser.username, 'Cleared all orders', '');
-                loadOrders();
-                showNotification('🗑️ All orders cleared');
-            }
-        }
-
-        function exportCSV() {
-            var orders = JSON.parse(localStorage.getItem('nabzOrders')) || [];
-
-            if (orders.length === 0) {
-                alert('No orders to export.');
-                return;
-            }
-
-            var csv = 'Order #,Date,Name,Phone,Address,Payment,Items,Total,Status\n';
-            orders.forEach(function(order, index) {
-                var items = order.items.map(function(item) {
-                    return item.quantity + 'x ' + item.name;
-                }).join('; ');
-                csv += (index + 1) + ',' +
-                    order.date + ',' +
-                    order.name + ',' +
-                    order.phone + ',' +
-                    order.address + ',' +
-                    order.payment + ',' +
-                    items + ',' +
-                    order.total.toFixed(2) + ',' +
-                    order.status + '\n';
-            });
-
-            var blob = new Blob([csv], { type: 'text/csv' });
-            var url = URL.createObjectURL(blob);
-            var a = document.createElement('a');
-            a.href = url;
-            a.download = 'orders-' + new Date().toISOString().split('T')[0] + '.csv';
-            a.click();
-            URL.revokeObjectURL(url);
-
-            showNotification('📊 Orders exported to CSV');
-        }
-
-        // ============================================================
-        // 9. LOAD USERS
-        // ============================================================
-        function loadUsers() {
-            var users = getUsers();
-            var tbody = document.getElementById('usersTableBody');
-
-            if (users.length === 0) {
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="6" style="text-align: center; padding: 30px; color: #95a5a6;">
-                            No users yet. Create one from the login page.
-                        </td>
-                    </tr>
-                `;
-                return;
-            }
-
-            var html = '';
-            users.forEach(function(user, index) {
-                var statusColor = user.status === 'active' ? '#27ae60' : '#e74c3c';
-                var statusText = user.status === 'active' ? '✅ Active' : '❌ Inactive';
-                html += `
-                    <tr>
-                        <td>${index + 1}</td>
-                        <td>${user.fullName || user.username}</td>
-                        <td>${user.username}</td>
-                        <td>${user.role || 'staff'}</td>
-                        <td style="color: ${statusColor};">${statusText}</td>
-                        <td class="user-actions">
-                            ${user.username !== 'admin' ? `
-                                <button class="delete-user" onclick="deleteUser('${user.username}')">Delete</button>
-                                <button class="reset-pw" onclick="resetPassword('${user.username}')">Reset</button>
-                            ` : `
-                                <span style="color: #95a5a6; font-size: 0.8em;">Protected</span>
-                            `}
-                        </td>
-                    </tr>
-                `;
-            });
-            tbody.innerHTML = html;
-        }
-
-        function deleteUser(username) {
-            if (!currentUser || currentUser.role !== 'admin') {
-                alert('Only admin can delete users.');
-                return;
-            }
-            if (username === 'admin') {
-                alert('Cannot delete the main admin account.');
-                return;
-            }
-            if (confirm('Delete user "' + username + '"?')) {
-                var users = getUsers();
-                users = users.filter(function(u) { return u.username !== username; });
-                saveUsers(users);
-                logActivity(currentUser.username, 'Deleted user', username);
-                loadUsers();
-                showNotification('🗑️ User "' + username + '" deleted');
-            }
-        }
-
-        function resetPassword(username) {
-            if (!currentUser || currentUser.role !== 'admin') {
-                alert('Only admin can reset passwords.');
-                return;
-            }
-            if (username === 'admin') {
-                alert('Admin password cannot be reset from here.');
-                return;
-            }
-            var newPassword = prompt('Enter new password for "' + username + '":');
-            if (newPassword && newPassword.length >= 6) {
-                var users = getUsers();
-                var user = users.find(function(u) { return u.username === username; });
-                if (user) {
-                    user.password = newPassword;
-                    saveUsers(users);
-                    logActivity(currentUser.username, 'Reset password', username);
-                    loadUsers();
-                    showNotification('✅ Password reset for "' + username + '"');
-                }
-            } else if (newPassword !== null) {
-                alert('Password must be at least 6 characters.');
-            }
-        }
-
-        // ============================================================
-        // 10. LOAD ACTIVITY
-        // ============================================================
-        function loadActivity() {
-            var activities = getActivity();
-            var container = document.getElementById('activityContainer');
-
-            if (activities.length === 0) {
-                container.innerHTML = `
-                    <div class="empty">
-                        <i class="fas fa-clipboard-list"></i>
-                        <p>No activity yet</p>
-                    </div>
-                `;
-                return;
-            }
-
-            var html = '';
-            activities.forEach(function(activity) {
-                html += `
-                    <div class="activity-item">
-                        <div>
-                            <span class="activity-user">👤 ${activity.username}</span>
-                            <span class="activity-action">${activity.action}</span>
-                            ${activity.details ? <span class="activity-order">${activity.details}</span> : ''}
-                        </div>
-                        <span class="activity-time">${activity.time}</span>
-                    </div>
-                `;
-            });
-            container.innerHTML = html;
-        }
-
-        // ============================================================
-        // 11. NOTIFICATIONS
-        // ============================================================
-        function playSound() {
-            try {
-                var audio = new Audio('data:audio/wav;base64,UklGRlQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YUAAAABjYXJlIGZyZWUgc291bmQgaXMgZ29vZCBidXQgdGhpcyBpcyBzaWxlbnQgc291bmQgdGhhdCBjYW4gYmUgdXNlZCBmb3IgZnJlZQ==');
-                audio.play();
-            } catch (e) {
-                try {
-                    var ctx = new(window.AudioContext || window.webkitAudioContext)();
-                    var osc = ctx.createOscillator();
-                    var gain = ctx.createGain();
-                    osc.connect(gain);
-                    gain.connect(ctx.destination);
-                    osc.frequency.value = 800;
-                    osc.type = 'sine';
-                    gain.gain.value = 0.3;
-                    osc.start();
-                    setTimeout(function() { osc.stop(); }, 200);
-                } catch (e2) {
-                    console.log('Sound not supported');
-                }
-            }
-        }
-
-        function showNotification(message) {
-            var existing = document.querySelector('.notification');
-            if (existing) existing.remove();
-
-            var div = document.createElement('div');
-            div.className = 'notification';
-            div.innerHTML = '<i class="fas fa-bell"></i> ' + message;
-            document.body.appendChild(div);
-
-            setTimeout(function() {
-                div.remove();
-            }, 3000);
-        }
-
-        // ============================================================
-        // 12. START
-        // ============================================================
-        // Page loads with login visible, dashboard hidden
-        console.log("🚀 Admin Dashboard loaded!");
-    </script>
-
-</body>
-</html>
+    <!-- ============================================================== -->
+    <!-- PART 1 ENDS HERE — COPY PART 2 BELOW THIS LINE               -->
+    <!-- ============================================================== -->
