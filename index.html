@@ -97,12 +97,6 @@
         .login-btn.secondary:hover {
             background: #2980b9;
         }
-        .login-btn.danger {
-            background: #e74c3c;
-        }
-        .login-btn.danger:hover {
-            background: #c0392b;
-        }
         .login-container .demo-info {
             margin-top: 20px;
             padding: 15px;
@@ -117,12 +111,6 @@
         }
         .login-container .error-msg {
             color: #e74c3c;
-            font-size: 0.9em;
-            min-height: 30px;
-            margin-top: 10px;
-        }
-        .login-container .success-msg {
-            color: #27ae60;
             font-size: 0.9em;
             min-height: 30px;
             margin-top: 10px;
@@ -451,22 +439,6 @@
         .btn-delete:hover {
             background: #7f8c8d;
         }
-        .btn-action {
-            font-size: 0.75em;
-            padding: 4px 10px;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            font-weight: 600;
-        }
-        .btn-action.accepted {
-            background: #27ae60;
-            color: white;
-        }
-        .btn-action.rejected {
-            background: #e74c3c;
-            color: white;
-        }
 
         .empty {
             text-align: center;
@@ -527,12 +499,12 @@
             }
         }
 
-        /* ===== USERS TAB ===== */
         .users-list {
             background: rgba(255, 255, 255, 0.9);
             border-radius: 12px;
             padding: 20px;
             backdrop-filter: blur(5px);
+            overflow-x: auto;
         }
         .users-list table {
             width: 100%;
@@ -552,6 +524,7 @@
         .users-list .user-actions {
             display: flex;
             gap: 8px;
+            flex-wrap: wrap;
         }
         .users-list .user-actions button {
             padding: 4px 12px;
@@ -576,7 +549,6 @@
             background: #d68910;
         }
 
-        /* ===== ACTIVITY LOG ===== */
         .activity-item {
             background: rgba(255, 255, 255, 0.9);
             border-radius: 10px;
@@ -633,9 +605,6 @@
             }
             .header .user-info {
                 justify-content: center;
-            }
-            .users-list {
-                overflow-x: auto;
             }
         }
     </style>
@@ -831,9 +800,8 @@
 
     <script>
         // ============================================================
-        // 1. USER MANAGEMENT
+        // 1. USER MANAGEMENT FUNCTIONS
         // ============================================================
-
         function getUsers() {
             return JSON.parse(localStorage.getItem('nabzUsers')) || [];
         }
@@ -862,7 +830,7 @@
         }
 
         // ============================================================
-        // 2. REGISTER
+        // 2. REGISTER FUNCTIONS
         // ============================================================
         function showRegister() {
             document.getElementById('loginForm').style.display = 'none';
@@ -927,26 +895,38 @@
         }
 
         // ============================================================
-        // 3. LOGIN
+        // 3. LOGIN FUNCTION (FIXED)
         // ============================================================
         var currentUser = null;
 
         function login() {
+            console.log("✅ Login function called!");
+            
             var username = document.getElementById('loginUsername').value.trim();
             var password = document.getElementById('loginPassword').value.trim();
             var errorEl = document.getElementById('loginError');
 
+            console.log("✅ Username:", username);
+            console.log("✅ Password:", password);
+
             errorEl.textContent = '';
 
+            if (!username || !password) {
+                errorEl.textContent = '❌ Please enter username and password.';
+                return;
+            }
+
             var users = getUsers();
+            console.log("✅ Users found:", users.length);
+
             var user = users.find(function(u) {
                 return u.username === username && u.password === password && u.status === 'active';
             });
 
+            console.log("✅ User found:", user);
+
             if (!user) {
-                // Check if default admin exists
                 if (username === 'admin' && password === 'admin123') {
-                    // Create default admin if not exists
                     var existing = users.find(function(u) { return u.username === 'admin'; });
                     if (!existing) {
                         users.push({
@@ -958,8 +938,11 @@
                             created: new Date().toLocaleString()
                         });
                         saveUsers(users);
+                        console.log('✅ Admin account created!');
+                        user = { fullName: 'Administrator', username: 'admin', role: 'admin' };
+                    } else {
+                        user = existing;
                     }
-                    user = { fullName: 'Administrator', username: 'admin', role: 'admin' };
                 } else {
                     errorEl.textContent = '❌ Invalid username or password.';
                     return;
@@ -967,6 +950,8 @@
             }
 
             currentUser = user;
+            console.log("✅ Logged in as:", currentUser.username);
+
             document.getElementById('loginPage').style.display = 'none';
             document.getElementById('dashboardPage').style.display = 'block';
             document.getElementById('currentUser').textContent = '👤 ' + user.username;
@@ -981,7 +966,7 @@
         }
 
         // ============================================================
-        // 4. LOGOUT
+        // 4. LOGOUT FUNCTION
         // ============================================================
         function logout() {
             if (currentUser) {
@@ -1029,9 +1014,6 @@
             applyFilters();
         }
 
-        // ============================================================
-        // 7. APPLY FILTERS
-        // ============================================================
         function applyFilters() {
             var search = document.getElementById('searchInput').value.toLowerCase();
             var statusFilter = document.getElementById('statusFilter').value;
@@ -1059,9 +1041,6 @@
             updateStats(filtered);
         }
 
-        // ============================================================
-        // 8. RENDER ORDERS
-        // ============================================================
         function renderOrders(orders) {
             var container = document.getElementById('ordersContainer');
             document.getElementById('orderCount').textContent = orders.length;
@@ -1131,9 +1110,6 @@
             container.innerHTML = html;
         }
 
-        // ============================================================
-        // 9. UPDATE STATS
-        // ============================================================
         function updateStats(orders) {
             var pending = orders.filter(function(o) { return o.status === 'Pending'; });
             var completed = orders.filter(function(o) { return o.status === 'Completed'; });
@@ -1148,7 +1124,7 @@
         }
 
         // ============================================================
-        // 10. UPDATE ORDER STATUS
+        // 7. ORDER ACTIONS
         // ============================================================
         function updateOrderStatus(index, status) {
             if (!currentUser) return;
@@ -1162,9 +1138,6 @@
             }
         }
 
-        // ============================================================
-        // 11. DELETE ORDER
-        // ============================================================
         function deleteOrder(index) {
             if (!currentUser) return;
             if (confirm('Delete this order?')) {
@@ -1179,9 +1152,6 @@
             }
         }
 
-        // ============================================================
-        // 12. CLEAR ALL ORDERS
-        // ============================================================
         function clearAllOrders() {
             if (!currentUser) return;
             if (confirm('Delete ALL orders? This cannot be undone!')) {
@@ -1192,9 +1162,6 @@
             }
         }
 
-        // ============================================================
-        // 13. EXPORT CSV
-        // ============================================================
         function exportCSV() {
             var orders = JSON.parse(localStorage.getItem('nabzOrders')) || [];
 
@@ -1231,7 +1198,7 @@
         }
 
         // ============================================================
-        // 14. LOAD USERS
+        // 8. USER MANAGEMENT
         // ============================================================
         function loadUsers() {
             var users = getUsers();
@@ -1273,9 +1240,6 @@
             tbody.innerHTML = html;
         }
 
-        // ============================================================
-        // 15. DELETE USER
-        // ============================================================
         function deleteUser(username) {
             if (!currentUser || currentUser.role !== 'admin') {
                 alert('Only admin can delete users.');
@@ -1295,9 +1259,6 @@
             }
         }
 
-        // ============================================================
-        // 16. RESET PASSWORD
-        // ============================================================
         function resetPassword(username) {
             if (!currentUser || currentUser.role !== 'admin') {
                 alert('Only admin can reset passwords.');
@@ -1324,7 +1285,7 @@
         }
 
         // ============================================================
-        // 17. LOAD ACTIVITY
+        // 9. ACTIVITY LOG
         // ============================================================
         function loadActivity() {
             var activities = getActivity();
@@ -1357,7 +1318,7 @@
         }
 
         // ============================================================
-        // 18. SOUND NOTIFICATION
+        // 10. NOTIFICATIONS
         // ============================================================
         function playSound() {
             try {
@@ -1381,9 +1342,6 @@
             }
         }
 
-        // ============================================================
-        // 19. NOTIFICATION
-        // ============================================================
         function showNotification(message) {
             var existing = document.querySelector('.notification');
             if (existing) existing.remove();
@@ -1397,11 +1355,6 @@
                 div.remove();
             }, 3000);
         }
-
-        // ============================================================
-        // 20. AUTO-REFRESH
-        // ============================================================
-        // Auto-refresh is started inside login() function
     </script>
 
 </body>
