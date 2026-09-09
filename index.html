@@ -587,7 +587,7 @@
             // ONE USER: admin / admin123
             if (username === 'admin' && password === 'admin123') {
                 errorEl.textContent = '';
-                loggedIn = "";
+                loggedIn = false;
                 document.getElementById('loginPage').style.display = 'none';
                 document.getElementById('dashboardPage').style.display = 'block';
                 document.getElementById('currentUser').textContent = '👤 admin';
