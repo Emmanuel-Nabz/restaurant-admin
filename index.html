@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🍕 Admin Login</title>
+    <title>🍕 Admin Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -13,211 +13,29 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         body {
-            background-image: linear-gradient(rgba(240, 242, 245, 0.85), rgba(240, 242, 245, 0.85)), url('admin-bg.jpg');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
+            background: #f0f2f5;
             padding: 20px;
             max-width: 1000px;
             margin: 0 auto;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .login-container {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 40px 35px;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-            max-width: 420px;
-            width: 100%;
-            text-align: center;
-        }
-        .login-container h1 {
-            font-size: 2em;
-            color: #2c3e50;
-            margin-bottom: 5px;
-        }
-        .login-container h1 i {
-            color: #e67e22;
-        }
-        .login-container .subtitle {
-            color: #7f8c8d;
-            margin-bottom: 25px;
-            font-size: 0.95em;
-        }
-        .login-container .form-group {
-            margin-bottom: 18px;
-            text-align: left;
-        }
-        .login-container .form-group label {
-            display: block;
-            font-weight: 600;
-            color: #2c3e50;
-            margin-bottom: 5px;
-            font-size: 0.9em;
-        }
-        .login-container .form-group input {
-            width: 100%;
-            padding: 12px 16px;
-            border: 2px solid #ddd;
-            border-radius: 10px;
-            font-size: 1em;
-            transition: border-color 0.3s;
-        }
-        .login-container .form-group input:focus {
-            border-color: #3498db;
-            outline: none;
-        }
-        .login-btn {
-            width: 100%;
-            padding: 14px;
-            background: #e67e22;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 1.1em;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background 0.3s;
-            margin-top: 5px;
-        }
-        .login-btn:hover {
-            background: #d35400;
-        }
-        .login-btn i {
-            margin-right: 8px;
-        }
-        .login-btn.secondary {
-            background: #3498db;
-        }
-        .login-btn.secondary:hover {
-            background: #2980b9;
-        }
-        .login-container .demo-info {
-            margin-top: 20px;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            font-size: 0.85em;
-            color: #7f8c8d;
-            text-align: left;
-        }
-        .login-container .demo-info strong {
-            color: #2c3e50;
-        }
-        .login-container .error-msg {
-            color: #e74c3c;
-            font-size: 0.9em;
-            min-height: 30px;
-            margin-top: 10px;
-        }
-        .login-container .success-msg {
-            color: #27ae60;
-            font-size: 0.9em;
-            min-height: 30px;
-            margin-top: 10px;
-        }
-        .login-container .switch-link {
-            color: #3498db;
-            cursor: pointer;
-            font-weight: 600;
-        }
-        .login-container .switch-link:hover {
-            text-decoration: underline;
-        }
-
-        .dashboard {
-            display: none;
-            width: 100%;
+            padding-bottom: 100px;
         }
 
         .header {
             text-align: center;
-            padding: 20px 0;
+            padding: 30px 0 20px;
             border-bottom: 4px solid #e67e22;
             margin-bottom: 30px;
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(10px);
+            background: white;
             border-radius: 16px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
         }
-        .header .top-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 20px;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
         .header h1 {
-            font-size: 1.8em;
+            font-size: 2em;
             color: #2c3e50;
         }
-        .header .user-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-        .header .user-info span {
-            color: #2c3e50;
-            font-weight: 600;
-        }
-        .header .user-info .badge {
-            background: #e67e22;
-            color: white;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.7em;
-        }
-        .header .logout-btn {
-            background: #e74c3c;
-            color: white;
-            border: none;
-            padding: 8px 18px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: background 0.3s;
-        }
-        .header .logout-btn:hover {
-            background: #c0392b;
-        }
-        .header .tabs {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            margin-top: 15px;
-            flex-wrap: wrap;
-        }
-        .header .tab-btn {
-            padding: 8px 20px;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: 600;
-            background: rgba(255, 255, 255, 0.5);
+        .header p {
             color: #7f8c8d;
-            transition: all 0.3s;
-        }
-        .header .tab-btn.active {
-            background: #e67e22;
-            color: white;
-        }
-        .header .tab-btn:hover {
-            background: #e67e22;
-            color: white;
-        }
-
-        .tab-content {
-            display: none;
-        }
-        .tab-content.active {
-            display: block;
+            font-size: 1em;
         }
 
         .stats {
@@ -227,8 +45,7 @@
             margin-bottom: 30px;
         }
         .stat-card {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(5px);
+            background: white;
             padding: 20px;
             border-radius: 12px;
             text-align: center;
@@ -260,8 +77,7 @@
             flex-wrap: wrap;
             gap: 10px;
             margin-bottom: 20px;
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(5px);
+            background: white;
             padding: 15px;
             border-radius: 12px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
@@ -276,7 +92,7 @@
             flex: 1;
             min-width: 150px;
             transition: border-color 0.3s;
-            background: rgba(255, 255, 255, 0.8);
+            background: white;
         }
         .filters input:focus,
         .filters select:focus {
@@ -291,8 +107,7 @@
             margin-bottom: 15px;
             flex-wrap: wrap;
             gap: 10px;
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(5px);
+            background: white;
             padding: 12px 18px;
             border-radius: 12px;
         }
@@ -337,8 +152,7 @@
         }
 
         .order-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(5px);
+            background: white;
             border-radius: 12px;
             padding: 16px 18px;
             margin-bottom: 12px;
@@ -395,7 +209,7 @@
             color: #7f8c8d;
         }
         .order-card .order-items {
-            background: rgba(248, 249, 250, 0.8);
+            background: #f8f9fa;
             padding: 10px 12px;
             border-radius: 8px;
             margin: 8px 0;
@@ -450,9 +264,6 @@
             text-align: center;
             color: #95a5a6;
             padding: 60px 0;
-            background: rgba(255, 255, 255, 0.7);
-            border-radius: 12px;
-            backdrop-filter: blur(5px);
         }
         .empty i {
             font-size: 4em;
@@ -465,15 +276,15 @@
             color: #3498db;
             text-decoration: none;
             font-weight: 600;
-            background: rgba(255, 255, 255, 0.7);
+            background: white;
             padding: 10px 20px;
             border-radius: 30px;
-            backdrop-filter: blur(5px);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
             transition: all 0.3s;
         }
         .back-link:hover {
             text-decoration: underline;
-            background: rgba(255, 255, 255, 0.9);
+            background: #f8f9fa;
             transform: translateX(-5px);
         }
 
@@ -505,84 +316,6 @@
             }
         }
 
-        .users-list {
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 12px;
-            padding: 20px;
-            backdrop-filter: blur(5px);
-            overflow-x: auto;
-        }
-        .users-list table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .users-list th {
-            text-align: left;
-            padding: 12px 10px;
-            border-bottom: 2px solid #ecf0f1;
-            color: #2c3e50;
-        }
-        .users-list td {
-            padding: 10px;
-            border-bottom: 1px solid #ecf0f1;
-            color: #555;
-        }
-        .users-list .user-actions {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-        .users-list .user-actions button {
-            padding: 4px 12px;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.8em;
-        }
-        .users-list .user-actions .delete-user {
-            background: #e74c3c;
-            color: white;
-        }
-        .users-list .user-actions .delete-user:hover {
-            background: #c0392b;
-        }
-        .users-list .user-actions .reset-pw {
-            background: #f39c12;
-            color: white;
-        }
-        .users-list .user-actions .reset-pw:hover {
-            background: #d68910;
-        }
-
-        .activity-item {
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 10px;
-            padding: 12px 16px;
-            margin-bottom: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 8px;
-            border-left: 3px solid #3498db;
-        }
-        .activity-item .activity-user {
-            font-weight: 600;
-            color: #2c3e50;
-        }
-        .activity-item .activity-action {
-            color: #555;
-        }
-        .activity-item .activity-time {
-            color: #95a5a6;
-            font-size: 0.8em;
-        }
-        .activity-item .activity-order {
-            color: #e67e22;
-            font-weight: 600;
-        }
-
         @media (max-width: 600px) {
             .stats {
                 grid-template-columns: 1fr 1fr;
@@ -604,411 +337,76 @@
                 flex-direction: column;
                 align-items: stretch;
             }
-            .header .top-bar {
-                flex-direction: column;
-                align-items: stretch;
-                text-align: center;
-            }
-            .header .user-info {
-                justify-content: center;
-            }
         }
     </style>
 </head>
 <body>
 
-    <!-- ===== LOGIN PAGE ===== -->
-    <div id="loginPage" class="login-container">
-        <h1><i class="fas fa-utensils"></i> Nabz-Tech Eats</h1>
-        <p class="subtitle">Restaurant Admin Login</p>
+    <div class="header">
+        <h1>🍕 Admin Dashboard</h1>
+        <p>Manage orders from Nabz-Tech Eats</p>
+    </div>
 
-        <div id="loginForm">
-            <div class="form-group">
-                <label><i class="fas fa-user"></i> Username</label>
-                <input type="text" id="loginUsername" placeholder="Enter username" value="admin">
-            </div>
-            <div class="form-group">
-                <label><i class="fas fa-lock"></i> Password</label>
-                <input type="password" id="loginPassword" placeholder="Enter password" value="admin123">
-            </div>
-            <button class="login-btn" onclick="login()">
-                <i class="fas fa-sign-in-alt"></i> Login
-            </button>
-            <p style="margin-top: 12px; font-size: 0.9em;">
-                Don't have an account? <span class="switch-link" onclick="showRegister()">Create Account</span>
-            </p>
-            <div id="loginError" class="error-msg"></div>
+    <div class="stats">
+        <div class="stat-card">
+            <div class="number" id="totalOrders">0</div>
+            <div class="label">📊 Total Orders</div>
         </div>
-
-        <div id="registerForm" style="display: none;">
-            <div class="form-group">
-                <label><i class="fas fa-user"></i> Full Name</label>
-                <input type="text" id="regFullName" placeholder="Enter full name">
-            </div>
-            <div class="form-group">
-                <label><i class="fas fa-user-tag"></i> Username</label>
-                <input type="text" id="regUsername" placeholder="Choose a username">
-            </div>
-            <div class="form-group">
-                <label><i class="fas fa-lock"></i> Password</label>
-                <input type="password" id="regPassword" placeholder="Choose a password">
-            </div>
-            <div class="form-group">
-                <label><i class="fas fa-lock"></i> Confirm Password</label>
-                <input type="password" id="regConfirmPassword" placeholder="Confirm password">
-            </div>
-            <button class="login-btn secondary" onclick="registerUser()">
-                <i class="fas fa-user-plus"></i> Create Account
-            </button>
-            <p style="margin-top: 12px; font-size: 0.9em;">
-                Already have an account? <span class="switch-link" onclick="showLogin()">Login</span>
-            </p>
-            <div id="registerError" class="error-msg"></div>
-            <div id="registerSuccess" class="success-msg"></div>
+        <div class="stat-card">
+            <div class="number green" id="pendingOrders">0</div>
+            <div class="label">⏳ Pending</div>
         </div>
-
-        <div class="demo-info">
-            <strong>Default Admin:</strong><br>
-            👤 Username: <strong>admin</strong><br>
-            🔒 Password: <strong>admin123</strong>
+        <div class="stat-card">
+            <div class="number" id="completedOrders">0</div>
+            <div class="label">✅ Completed</div>
+        </div>
+        <div class="stat-card">
+            <div class="number green" id="totalRevenue">BD 0</div>
+            <div class="label">💰 Revenue</div>
         </div>
     </div>
 
-    <!-- ===== DASHBOARD ===== -->
-    <div id="dashboardPage" class="dashboard">
-
-        <div class="header">
-            <div class="top-bar">
-                <h1>🍕 Admin Dashboard</h1>
-                <div class="user-info">
-                    <span id="currentUser">👤 admin</span>
-                    <span class="badge" id="userRole">Admin</span>
-                    <button class="logout-btn" onclick="logout()">
-                        <i class="fas fa-sign-out-alt"></i> Logout
-                    </button>
-                </div>
-            </div>
-            <div class="tabs">
-                <button class="tab-btn active" onclick="switchTab('orders')" id="tabOrders">
-                    📋 Orders
-                </button>
-                <button class="tab-btn" onclick="switchTab('users')" id="tabUsers">
-                    👥 Users
-                </button>
-                <button class="tab-btn" onclick="switchTab('activity')" id="tabActivity">
-                    📜 Activity Log
-                </button>
-            </div>
-        </div>
-
-        <!-- ===== TAB 1: ORDERS ===== -->
-        <div id="tabOrdersContent" class="tab-content active">
-            <div class="stats">
-                <div class="stat-card">
-                    <div class="number" id="totalOrders">0</div>
-                    <div class="label">📊 Total Orders</div>
-                </div>
-                <div class="stat-card">
-                    <div class="number green" id="pendingOrders">0</div>
-                    <div class="label">⏳ Pending</div>
-                </div>
-                <div class="stat-card">
-                    <div class="number" id="completedOrders">0</div>
-                    <div class="label">✅ Completed</div>
-                </div>
-                <div class="stat-card">
-                    <div class="number green" id="totalRevenue">BD 0</div>
-                    <div class="label">💰 Revenue</div>
-                </div>
-            </div>
-
-            <div class="filters">
-                <input type="text" id="searchInput" placeholder="🔍 Search by name or order #..." oninput="applyFilters()">
-                <input type="date" id="dateFrom" onchange="applyFilters()">
-                <span style="color: #7f8c8d;">to</span>
-                <input type="date" id="dateTo" onchange="applyFilters()">
-                <select id="statusFilter" onchange="applyFilters()">
-                    <option value="all">📋 All Status</option>
-                    <option value="Pending">⏳ Pending</option>
-                    <option value="Completed">✅ Completed</option>
-                    <option value="Rejected">❌ Rejected</option>
-                </select>
-            </div>
-
-            <div class="orders-header">
-                <h2>📋 Orders (<span id="orderCount">0</span>)</h2>
-                <div class="actions">
-                    <button class="btn btn-refresh" onclick="loadOrders()">
-                        <i class="fas fa-sync"></i> Refresh
-                    </button>
-                    <button class="btn btn-export" onclick="exportCSV()">
-                        <i class="fas fa-download"></i> Export CSV
-                    </button>
-                    <button class="btn btn-clear" onclick="clearAllOrders()">
-                        <i class="fas fa-trash"></i> Clear All
-                    </button>
-                </div>
-            </div>
-            <div id="ordersContainer">
-                <div class="empty">
-                    <i class="fas fa-inbox"></i>
-                    <p>No orders yet</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- ===== TAB 2: USERS ===== -->
-        <div id="tabUsersContent" class="tab-content">
-            <div class="orders-header">
-                <h2>👥 Users</h2>
-                <button class="btn btn-refresh" onclick="loadUsers()">
-                    <i class="fas fa-sync"></i> Refresh
-                </button>
-            </div>
-            <div id="usersContainer" class="users-list">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Full Name</th>
-                            <th>Username</th>
-                            <th>Role</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="usersTableBody">
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- ===== TAB 3: ACTIVITY LOG ===== -->
-        <div id="tabActivityContent" class="tab-content">
-            <div class="orders-header">
-                <h2>📜 Activity Log</h2>
-                <button class="btn btn-refresh" onclick="loadActivity()">
-                    <i class="fas fa-sync"></i> Refresh
-                </button>
-            </div>
-            <div id="activityContainer">
-                <div class="empty">
-                    <i class="fas fa-clipboard-list"></i>
-                    <p>No activity yet</p>
-                </div>
-            </div>
-        </div>
-
-        <a href="https://emmanuel-nabz.github.io/restaurant-app/" class="back-link">
-            🏠 Back to Customer App
-        </a>
+    <div class="filters">
+        <input type="text" id="searchInput" placeholder="🔍 Search by name or order #..." oninput="applyFilters()">
+        <input type="date" id="dateFrom" onchange="applyFilters()">
+        <span style="color: #7f8c8d;">to</span>
+        <input type="date" id="dateTo" onchange="applyFilters()">
+        <select id="statusFilter" onchange="applyFilters()">
+            <option value="all">📋 All Status</option>
+            <option value="Pending">⏳ Pending</option>
+            <option value="Completed">✅ Completed</option>
+            <option value="Rejected">❌ Rejected</option>
+        </select>
     </div>
+
+    <div class="orders-header">
+        <h2>📋 Orders (<span id="orderCount">0</span>)</h2>
+        <div class="actions">
+            <button class="btn btn-refresh" onclick="loadOrders()">
+                <i class="fas fa-sync"></i> Refresh
+            </button>
+            <button class="btn btn-export" onclick="exportCSV()">
+                <i class="fas fa-download"></i> Export CSV
+            </button>
+            <button class="btn btn-clear" onclick="clearAllOrders()">
+                <i class="fas fa-trash"></i> Clear All
+            </button>
+        </div>
+    </div>
+    <div id="ordersContainer">
+        <div class="empty">
+            <i class="fas fa-inbox"></i>
+            <p>No orders yet</p>
+        </div>
+    </div>
+
+    <a href="https://emmanuel-nabz.github.io/restaurant-app/" class="back-link">
+        🏠 Back to Customer App
+    </a>
 
     <script>
         // ============================================================
-        // 1. USER MANAGEMENT FUNCTIONS
-        // ============================================================
-        function getUsers() {
-            return JSON.parse(localStorage.getItem('nabzUsers')) || [];
-        }
-
-        function saveUsers(users) {
-            localStorage.setItem('nabzUsers', JSON.stringify(users));
-        }
-
-        function getActivity() {
-            return JSON.parse(localStorage.getItem('nabzActivity')) || [];
-        }
-
-        function saveActivity(activity) {
-            localStorage.setItem('nabzActivity', JSON.stringify(activity));
-        }
-
-        function logActivity(username, action, details) {
-            var activity = getActivity();
-            activity.unshift({
-                username: username,
-                action: action,
-                details: details || '',
-                time: new Date().toLocaleString()
-            });
-            saveActivity(activity);
-        }
-
-        // ============================================================
-        // 2. REGISTER FUNCTIONS
-        // ============================================================
-        function showRegister() {
-            document.getElementById('loginForm').style.display = 'none';
-            document.getElementById('registerForm').style.display = 'block';
-            document.getElementById('loginError').textContent = '';
-            document.getElementById('registerError').textContent = '';
-            document.getElementById('registerSuccess').textContent = '';
-        }
-
-        function showLogin() {
-            document.getElementById('loginForm').style.display = 'block';
-            document.getElementById('registerForm').style.display = 'none';
-            document.getElementById('loginError').textContent = '';
-            document.getElementById('registerError').textContent = '';
-            document.getElementById('registerSuccess').textContent = '';
-        }
-
-        function registerUser() {
-            var fullName = document.getElementById('regFullName').value.trim();
-            var username = document.getElementById('regUsername').value.trim();
-            var password = document.getElementById('regPassword').value;
-            var confirmPassword = document.getElementById('regConfirmPassword').value;
-            var errorEl = document.getElementById('registerError');
-            var successEl = document.getElementById('registerSuccess');
-
-            errorEl.textContent = '';
-            successEl.textContent = '';
-
-            if (!fullName) { errorEl.textContent = '❌ Please enter your full name.'; return; }
-            if (!username) { errorEl.textContent = '❌ Please choose a username.'; return; }
-            if (username.length < 3) { errorEl.textContent = '❌ Username must be at least 3 characters.'; return; }
-            if (!password) { errorEl.textContent = '❌ Please choose a password.'; return; }
-            if (password.length < 6) { errorEl.textContent = '❌ Password must be at least 6 characters.'; return; }
-            if (password !== confirmPassword) { errorEl.textContent = '❌ Passwords do not match.'; return; }
-
-            var users = getUsers();
-            if (users.find(function(u) { return u.username === username; })) {
-                errorEl.textContent = '❌ Username already exists. Please choose another.';
-                return;
-            }
-
-            users.push({
-                fullName: fullName,
-                username: username,
-                password: password,
-                role: 'staff',
-                status: 'active',
-                created: new Date().toLocaleString()
-            });
-            saveUsers(users);
-
-            successEl.textContent = '✅ Account created successfully! You can now login.';
-            document.getElementById('regFullName').value = '';
-            document.getElementById('regUsername').value = '';
-            document.getElementById('regPassword').value = '';
-            document.getElementById('regConfirmPassword').value = '';
-
-            setTimeout(function() {
-                showLogin();
-                successEl.textContent = '';
-            }, 2000);
-        }
-
-        // ============================================================
-        // 3. LOGIN FUNCTION (FIXED)
-        // ============================================================
-        var currentUser = null;
-
-        function login() {
-    alert("Step 1: Login function called!");
-    
-    var username = document.getElementById('loginUsername').value.trim();
-    var password = document.getElementById('loginPassword').value.trim();
-    var errorEl = document.getElementById('loginError');
-
-    alert("Step 2: Username: " + username + ", Password: " + password);
-
-    errorEl.textContent = '';
-
-    if (!username || !password) {
-        alert("Step 3: Empty fields!");
-        errorEl.textContent = '❌ Please enter username and password.';
-        return;
-    }
-
-    alert("Step 4: Getting users from localStorage...");
-    var users = getUsers();
-    alert("Step 5: Users found: " + users.length);
-
-    var user = users.find(function(u) {
-        return u.username === username && u.password === password && u.status === 'active';
-    });
-
-    alert("Step 6: User found: " + (user ? user.username : "None"));
-
-    if (!user) {
-        alert("Step 7: User not found, checking for default admin...");
-        if (username === 'admin' && password === 'admin123') {
-            var existing = users.find(function(u) { return u.username === 'admin'; });
-            if (!existing) {
-                users.push({
-                    fullName: 'Administrator',
-                    username: 'admin',
-                    password: 'admin123',
-                    role: 'admin',
-                    status: 'active',
-                    created: new Date().toLocaleString()
-                });
-                saveUsers(users);
-                alert("Step 8: Admin account created!");
-                user = { fullName: 'Administrator', username: 'admin', role: 'admin' };
-            } else {
-                alert("Step 8: Admin already exists");
-                user = existing;
-            }
-        } else {
-            alert("Step 8: Invalid login");
-            errorEl.textContent = '❌ Invalid username or password.';
-            return;
-        }
-    }
-
-    alert("Step 9: Login successful! Logging in as: " + user.username);
-
-    currentUser = user;
-
-    document.getElementById('loginPage').style.display = 'none';
-    document.getElementById('dashboardPage').style.display = 'block';
-    document.getElementById('currentUser').textContent = '👤 ' + user.username;
-    document.getElementById('userRole').textContent = user.role || 'Staff';
-
-    logActivity(user.username, 'Logged in', '');
-
-    loadOrders();
-    loadUsers();
-    loadActivity();
-    setInterval(loadOrders, 30000);
-    
-    alert("Step 10: Dashboard should be visible now!");
-}
-        // ============================================================
-        // 4. LOGOUT FUNCTION
-        // ============================================================
-        function logout() {
-            if (currentUser) {
-                logActivity(currentUser.username, 'Logged out', '');
-            }
-            if (confirm('Are you sure you want to logout?')) {
-                currentUser = null;
-                document.getElementById('dashboardPage').style.display = 'none';
-                document.getElementById('loginPage').style.display = 'block';
-                document.getElementById('loginPassword').value = '';
-            }
-        }
-
-        // ============================================================
-        // 5. TAB SWITCHING
-        // ============================================================
-        function switchTab(tab) {
-            document.querySelectorAll('.tab-content').forEach(function(el) {
-                el.classList.remove('active');
-            });
-            document.querySelectorAll('.tab-btn').forEach(function(el) {
-                el.classList.remove('active');
-            });
-
-            document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1) + 'Content').classList.add('active');
-            document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add('active');
-        }
-
-        // ============================================================
-        // 6. LOAD ORDERS
+        // 1. LOAD ORDERS
         // ============================================================
         let allOrders = [];
         let previousOrderCount = 0;
@@ -1016,16 +414,18 @@
         function loadOrders() {
             allOrders = JSON.parse(localStorage.getItem('nabzOrders')) || [];
 
-            if (allOrders.length > previousOrderCount && currentUser) {
+            if (allOrders.length > previousOrderCount) {
                 showNotification('🛎️ New order received!');
                 playSound();
-                logActivity(currentUser.username, 'New order received', 'Order #' + allOrders.length);
             }
             previousOrderCount = allOrders.length;
 
             applyFilters();
         }
 
+        // ============================================================
+        // 2. APPLY FILTERS
+        // ============================================================
         function applyFilters() {
             var search = document.getElementById('searchInput').value.toLowerCase();
             var statusFilter = document.getElementById('statusFilter').value;
@@ -1053,6 +453,9 @@
             updateStats(filtered);
         }
 
+        // ============================================================
+        // 3. RENDER ORDERS
+        // ============================================================
         function renderOrders(orders) {
             var container = document.getElementById('ordersContainer');
             document.getElementById('orderCount').textContent = orders.length;
@@ -1122,6 +525,9 @@
             container.innerHTML = html;
         }
 
+        // ============================================================
+        // 4. UPDATE STATS
+        // ============================================================
         function updateStats(orders) {
             var pending = orders.filter(function(o) { return o.status === 'Pending'; });
             var completed = orders.filter(function(o) { return o.status === 'Completed'; });
@@ -1136,44 +542,47 @@
         }
 
         // ============================================================
-        // 7. ORDER ACTIONS
+        // 5. UPDATE ORDER STATUS
         // ============================================================
         function updateOrderStatus(index, status) {
-            if (!currentUser) return;
             var orders = JSON.parse(localStorage.getItem('nabzOrders')) || [];
             if (index >= 0 && index < orders.length) {
                 orders[index].status = status;
                 localStorage.setItem('nabzOrders', JSON.stringify(orders));
-                logActivity(currentUser.username, 'Order ' + status, 'Order #' + (index + 1));
                 loadOrders();
                 showNotification('✅ Order #' + (index + 1) + ' updated to ' + status);
             }
         }
 
+        // ============================================================
+        // 6. DELETE ORDER
+        // ============================================================
         function deleteOrder(index) {
-            if (!currentUser) return;
             if (confirm('Delete this order?')) {
                 var orders = JSON.parse(localStorage.getItem('nabzOrders')) || [];
                 if (index >= 0 && index < orders.length) {
                     orders.splice(index, 1);
                     localStorage.setItem('nabzOrders', JSON.stringify(orders));
-                    logActivity(currentUser.username, 'Deleted order', 'Order #' + (index + 1));
                     loadOrders();
                     showNotification('🗑️ Order #' + (index + 1) + ' deleted');
                 }
             }
         }
 
+        // ============================================================
+        // 7. CLEAR ALL ORDERS
+        // ============================================================
         function clearAllOrders() {
-            if (!currentUser) return;
             if (confirm('Delete ALL orders? This cannot be undone!')) {
                 localStorage.removeItem('nabzOrders');
-                logActivity(currentUser.username, 'Cleared all orders', '');
                 loadOrders();
                 showNotification('🗑️ All orders cleared');
             }
         }
 
+        // ============================================================
+        // 8. EXPORT CSV
+        // ============================================================
         function exportCSV() {
             var orders = JSON.parse(localStorage.getItem('nabzOrders')) || [];
 
@@ -1210,127 +619,7 @@
         }
 
         // ============================================================
-        // 8. USER MANAGEMENT
-        // ============================================================
-        function loadUsers() {
-            var users = getUsers();
-            var tbody = document.getElementById('usersTableBody');
-
-            if (users.length === 0) {
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="6" style="text-align: center; padding: 30px; color: #95a5a6;">
-                            No users yet. Create one from the login page.
-                        </td>
-                    </tr>
-                `;
-                return;
-            }
-
-            var html = '';
-            users.forEach(function(user, index) {
-                var statusColor = user.status === 'active' ? '#27ae60' : '#e74c3c';
-                var statusText = user.status === 'active' ? '✅ Active' : '❌ Inactive';
-                html += `
-                    <tr>
-                        <td>${index + 1}</td>
-                        <td>${user.fullName || user.username}</td>
-                        <td>${user.username}</td>
-                        <td>${user.role || 'staff'}</td>
-                        <td style="color: ${statusColor};">${statusText}</td>
-                        <td class="user-actions">
-                            ${user.username !== 'admin' ? `
-                                <button class="delete-user" onclick="deleteUser('${user.username}')">Delete</button>
-                                <button class="reset-pw" onclick="resetPassword('${user.username}')">Reset</button>
-                            ` : `
-                                <span style="color: #95a5a6; font-size: 0.8em;">Protected</span>
-                            `}
-                        </td>
-                    </tr>
-                `;
-            });
-            tbody.innerHTML = html;
-        }
-
-        function deleteUser(username) {
-            if (!currentUser || currentUser.role !== 'admin') {
-                alert('Only admin can delete users.');
-                return;
-            }
-            if (username === 'admin') {
-                alert('Cannot delete the main admin account.');
-                return;
-            }
-            if (confirm('Delete user "' + username + '"?')) {
-                var users = getUsers();
-                users = users.filter(function(u) { return u.username !== username; });
-                saveUsers(users);
-                logActivity(currentUser.username, 'Deleted user', username);
-                loadUsers();
-                showNotification('🗑️ User "' + username + '" deleted');
-            }
-        }
-
-        function resetPassword(username) {
-            if (!currentUser || currentUser.role !== 'admin') {
-                alert('Only admin can reset passwords.');
-                return;
-            }
-            if (username === 'admin') {
-                alert('Admin password cannot be reset from here.');
-                return;
-            }
-            var newPassword = prompt('Enter new password for "' + username + '":');
-            if (newPassword && newPassword.length >= 6) {
-                var users = getUsers();
-                var user = users.find(function(u) { return u.username === username; });
-                if (user) {
-                    user.password = newPassword;
-                    saveUsers(users);
-                    logActivity(currentUser.username, 'Reset password', username);
-                    loadUsers();
-                    showNotification('✅ Password reset for "' + username + '"');
-                }
-            } else if (newPassword !== null) {
-                alert('Password must be at least 6 characters.');
-            }
-        }
-
-        // ============================================================
-        // 9. ACTIVITY LOG
-        // ============================================================
-        function loadActivity() {
-            var activities = getActivity();
-            var container = document.getElementById('activityContainer');
-
-            if (activities.length === 0) {
-                container.innerHTML = `
-                    <div class="empty">
-                        <i class="fas fa-clipboard-list"></i>
-                        <p>No activity yet</p>
-                    </div>
-                `;
-                return;
-            }
-
-            var html = '';
-            activities.forEach(function(activity) {
-                html += `
-                    <div class="activity-item">
-                        <div>
-                            <span class="activity-user">👤 ${activity.username}</span>
-                            <span class="activity-action">${activity.action}</span>
-                            ${activity.details ? <span class="activity-order">${activity.details}</span> : ''}
-                        </div>
-                        <span class="activity-time">${activity.time}</span>
-                    </div>
-                `;
-            });
-            container.innerHTML = html;
-        }
-
-        // ============================================================
-        // 10. NOTIFICATIONS
+        // 9. SOUND NOTIFICATION
         // ============================================================
         function playSound() {
             try {
@@ -1354,6 +643,9 @@
             }
         }
 
+        // ============================================================
+        // 10. NOTIFICATION
+        // ============================================================
         function showNotification(message) {
             var existing = document.querySelector('.notification');
             if (existing) existing.remove();
@@ -1367,6 +659,12 @@
                 div.remove();
             }, 3000);
         }
+
+        // ============================================================
+        // 11. AUTO-REFRESH
+        // ============================================================
+        loadOrders();
+        setInterval(loadOrders, 30000);
     </script>
 
 </body>
