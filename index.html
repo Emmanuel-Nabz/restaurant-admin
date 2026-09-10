@@ -161,11 +161,11 @@
                     <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
                 </div>
             </div>
-            <div class="tabs">
-                <button class="tab-btn active" onclick="switchTab('orders')" id="tabOrders">📋 Orders</button>
-                <button class="tab-btn" onclick="switchTab('menu')" id="tabMenu">🍽️ Menu</button>
-            </div>
-        </div>
+           <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('orders')" id="tabOrders">📋 Orders</button>
+    <button class="tab-btn" onclick="switchTab('menu')" id="tabMenu">🍽️ Menu</button>
+    <button class="tab-btn" onclick="switchTab('customers')" id="tabCustomers">👥 Customers</button>
+</div>
 
         <!-- TAB 1: ORDERS -->
         <div id="tabOrdersContent" class="tab-content active">
@@ -258,6 +258,16 @@
                 <p style="color: #95a5a6; text-align: center; padding: 20px;">Loading menu...</p>
             </div>
         </div>
+        <!-- ===== TAB 3: CUSTOMERS ===== -->
+<div id="tabCustomersContent" class="tab-content">
+    <div class="orders-header">
+        <h2>👥 Registered Customers (<span id="customerCount">0</span>)</h2>
+        <button class="btn btn-refresh" onclick="loadCustomers()"><i class="fas fa-sync"></i> Refresh</button>
+    </div>
+    <div id="customersContainer" class="menu-list">
+        <p style="color: #95a5a6; text-align: center; padding: 20px;">Loading customers...</p>
+    </div>
+</div>
 
         <a href="https://emmanuel-nabz.github.io/restaurant-app/" class="back-link">🏠 Back to Customer App</a>
     </div>
@@ -301,13 +311,18 @@
             }
         }
 
-        function switchTab(tab) {
-            document.querySelectorAll('.tab-content').forEach(function(el) { el.classList.remove('active'); });
-            document.querySelectorAll('.tab-btn').forEach(function(el) { el.classList.remove('active'); });
-            document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1) + 'Content').classList.add('active');
-            document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add('active');
-            if (tab === 'menu') loadMenu();
-        }
+       function switchTab(tab) {
+    document.querySelectorAll('.tab-content').forEach(function(el) {
+        el.classList.remove('active');
+    });
+    document.querySelectorAll('.tab-btn').forEach(function(el) {
+        el.classList.remove('active');
+    });
+    document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1) + 'Content').classList.add('active');
+    document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add('active');
+    if (tab === 'menu') loadMenu();
+    if (tab === 'customers') loadCustomers();
+}
 
         // ============================================================
         // 2. ORDERS
@@ -588,7 +603,44 @@
                 showNotification('🗑️ Item deleted');
             }
         }
+// ============================================================
+// 4. CUSTOMERS MANAGEMENT
+// ============================================================
+function loadCustomers() {
+    var customers = JSON.parse(localStorage.getItem('nabzCustomers')) || [];
+    var container = document.getElementById('customersContainer');
+    var countEl = document.getElementById('customerCount');
+    
+    if (countEl) countEl.textContent = customers.length;
+    if (!container) return;
 
+    if (customers.length === 0) {
+        container.innerHTML = '<div class="empty"><i class="fas fa-users"></i><p>No customers registered yet</p></div>';
+        return;
+    }
+
+    var html = '<table style="width:100%; border-collapse:collapse;">' +
+        '<thead><tr style="text-align:left; border-bottom: 2px solid #ecf0f1;">' +
+        '<th style="padding:10px;">#</th>' +
+        '<th style="padding:10px;">Name</th>' +
+        '<th style="padding:10px;">Phone</th>' +
+        '<th style="padding:10px;">Address</th>' +
+        '<th style="padding:10px;">Registered</th>' +
+        '</tr></thead><tbody>';
+
+    customers.forEach(function(c, i) {
+        html += '<tr style="border-bottom: 1px solid #ecf0f1;">' +
+            '<td style="padding:10px;">' + (i + 1) + '</td>' +
+            '<td style="padding:10px; font-weight:600; color:#2c3e50;">' + c.name + '</td>' +
+            '<td style="padding:10px;"><a href="tel:' + c.phone + '" style="color:#3498db;">' + c.phone + '</a></td>' +
+            '<td style="padding:10px; color:#555;">' + c.address + '</td>' +
+            '<td style="padding:10px; color:#95a5a6; font-size:0.85em;">' + (c.created || '-') + '</td>' +
+            '</tr>';
+    });
+
+    html += '</tbody></table>';
+    container.innerHTML = html;
+}
         // ============================================================
         // 4. NOTIFICATIONS
         // ============================================================
@@ -613,6 +665,7 @@
                 document.getElementById('currentUser').textContent = '👤 admin';
                 loadOrders();
                 loadMenu();
+                loadCustomers();
                 setInterval(loadOrders, 30000);
             }
         }
