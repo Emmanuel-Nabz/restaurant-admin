@@ -245,15 +245,23 @@
                     </div>
                 </div>
                 <div class="form-row">
-                    <div class="form-group">
-                        <label>Price (BD)</label>
-                        <input type="number" id="menuPrice" placeholder="2.50" step="0.01" min="0">
-                    </div>
-                    <div class="form-group">
-                        <label>Image Name</label>
-                        <input type="text" id="menuImage" placeholder="e.g. burger.jpg">
-                    </div>
-                </div>
+    <div class="form-group">
+        <label>Price (BD)</label>
+        <input type="number" id="menuPrice" placeholder="2.50" step="0.01" min="0">
+    </div>
+    <div class="form-group">
+        <label>Upload Image</label>
+        <input type="file" id="menuImageFile" accept="image/*" onchange="previewImage(event)" style="padding: 8px;">
+    </div>
+</div>
+<div class="form-row">
+    <div class="form-group form-row-full">
+        <div id="imagePreviewContainer" style="display: none; text-align: center; margin-top: 10px;">
+            <img id="imagePreview" src="" alt="Preview" style="max-width: 200px; max-height: 200px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+        </div>
+        <input type="hidden" id="menuImage" value="">
+    </div>
+</div>
                 <div>
                     <button class="btn-save" onclick="saveMenuItem()"><i class="fas fa-save"></i> Save Item</button>
                     <button class="btn-cancel" onclick="cancelEdit()"><i class="fas fa-times"></i> Cancel</button>
@@ -464,85 +472,134 @@
         }
 
         function renderMenu() {
-            var container = document.getElementById('menuList');
-            if (!container) return;
-            if (allMenuItems.length === 0) {
-                container.innerHTML = '<div class="empty"><i class="fas fa-utensils"></i><p>No menu items yet. Add one above!</p></div>';
-                return;
-            }
-            var html = '';
-            allMenuItems.forEach(function(item, index) {
-                var catIcons = { 'Burgers': '🍔', 'Pizzas': '🍕', 'Wraps': '🌯', 'Sides': '🍟', 'Drinks': '🥤', 'Desserts': '🍦' };
-                var icon = catIcons[item.category] || '🍽️';
-                html += '<div class="menu-item-row">' +
-                    '<div class="item-info">' +
-                    '<span class="item-icon">' + icon + '</span>' +
-                    '<div class="item-details">' +
-                    '<div class="item-name">' + item.name + '</div>' +
-                    '<div class="item-desc">' + item.category + ' · ' + item.desc + '</div>' +
-                    '</div>' +
-                    '</div>' +
-                    '<div class="item-price">BD ' + parseFloat(item.price).toFixed(2) + '</div>' +
-                    '<div class="item-actions">' +
-                    '<button class="btn-edit" onclick="editMenuItem(' + index + ')"><i class="fas fa-edit"></i></button>' +
-                    '<button class="btn-delete-item" onclick="deleteMenuItem(' + index + ')"><i class="fas fa-trash"></i></button>' +
-                    '</div>' +
-                    '</div>';
-            });
-            container.innerHTML = html;
+    var container = document.getElementById('menuList');
+    if (!container) return;
+    
+    if (allMenuItems.length === 0) {
+        container.innerHTML = '<div class="empty"><i class="fas fa-utensils"></i><p>No menu items yet. Add one above!</p></div>';
+        return;
+    }
+    
+    var html = '';
+    allMenuItems.forEach(function(item, index) {
+        var catIcons = { 'Burgers': '🍔', 'Pizzas': '🍕', 'Wraps': '🌯', 'Sides': '🍟', 'Drinks': '🥤', 'Desserts': '🍦' };
+        var icon = catIcons[item.category] || '🍽️';
+        
+        // Check if image is base64 or filename
+        var imageHtml = '';
+        if (item.image && item.image.startsWith('data:image')) {
+            imageHtml = '<img src="' + item.image + '" style="width: 40px; height: 40px; border-radius: 8px; object-fit: cover;">';
+        } else {
+            imageHtml = '<span class="item-icon">' + icon + '</span>';
         }
+        
+        html += '<div class="menu-item-row">' +
+            '<div class="item-info">' +
+            imageHtml +
+            '<div class="item-details">' +
+            '<div class="item-name">' + item.name + '</div>' +
+            '<div class="item-desc">' + item.category + ' · ' + item.desc + '</div>' +
+            '</div>' +
+            '</div>' +
+            '<div class="item-price">BD ' + parseFloat(item.price).toFixed(2) + '</div>' +
+            '<div class="item-actions">' +
+            '<button class="btn-edit" onclick="editMenuItem(' + index + ')"><i class="fas fa-edit"></i></button>' +
+            '<button class="btn-delete-item" onclick="deleteMenuItem(' + index + ')"><i class="fas fa-trash"></i></button>' +
+            '</div>' +
+            '</div>';
+    });
+    container.innerHTML = html;
+}
+        // ============================================================
+// IMAGE UPLOAD PREVIEW
+// ============================================================
+function previewImage(event) {
+    var file = event.target.files[0];
+    if (!file) return;
+
+    // Check file size (max 2MB)
+    if (file.size > 2 * 1024 * 1024) {
+        alert('⚠️ Image is too large. Please choose an image under 2MB.');
+        event.target.value = '';
+        return;
+    }
+
+    var reader = new FileReader();
+    reader.onload = function(e) {
+        var base64Image = e.target.result;
+        
+        // Show preview
+        document.getElementById('imagePreview').src = base64Image;
+        document.getElementById('imagePreviewContainer').style.display = 'block';
+        
+        // Store base64 in hidden input
+        document.getElementById('menuImage').value = base64Image;
+    };
+    reader.readAsDataURL(file);
+}
 
         function saveMenuItem() {
-            var category = document.getElementById('menuCategory').value;
-            var name = document.getElementById('menuName').value.trim();
-            var desc = document.getElementById('menuDesc').value.trim();
-            var price = parseFloat(document.getElementById('menuPrice').value);
-            var image = document.getElementById('menuImage').value.trim() || 'default.jpg';
-            var editId = document.getElementById('editItemId').value;
+    var category = document.getElementById('menuCategory').value;
+    var name = document.getElementById('menuName').value.trim();
+    var desc = document.getElementById('menuDesc').value.trim();
+    var price = parseFloat(document.getElementById('menuPrice').value);
+    var image = document.getElementById('menuImage').value || 'default.jpg';
+    var editId = document.getElementById('editItemId').value;
 
-            if (!name) { alert('Please enter an item name.'); return; }
-            if (!desc) { alert('Please enter a description.'); return; }
-            if (isNaN(price) || price <= 0) { alert('Please enter a valid price.'); return; }
+    if (!name) { alert('Please enter an item name.'); return; }
+    if (!desc) { alert('Please enter a description.'); return; }
+    if (isNaN(price) || price <= 0) { alert('Please enter a valid price.'); return; }
 
-            var menu = getMenu();
+    var menu = getMenu();
 
-            if (editId) {
-                var index = parseInt(editId);
-                menu[index] = { category: category, name: name, desc: desc, price: price, image: image };
-                showNotification('✅ Item updated!');
-            } else {
-                menu.push({ category: category, name: name, desc: desc, price: price, image: image });
-                showNotification('✅ Item added!');
-            }
+    if (editId) {
+        var index = parseInt(editId);
+        menu[index] = { category: category, name: name, desc: desc, price: price, image: image };
+        showNotification('✅ Item updated!');
+    } else {
+        menu.push({ category: category, name: name, desc: desc, price: price, image: image });
+        showNotification('✅ Item added!');
+    }
 
-            saveMenu(menu);
-            cancelEdit();
-            loadMenu();
-        }
+    saveMenu(menu);
+    cancelEdit();
+    loadMenu();
+}
 
-        function editMenuItem(index) {
-            var item = allMenuItems[index];
-            document.getElementById('menuCategory').value = item.category;
-            document.getElementById('menuName').value = item.name;
-            document.getElementById('menuDesc').value = item.desc;
-            document.getElementById('menuPrice').value = item.price;
-            document.getElementById('menuImage').value = item.image || '';
-            document.getElementById('editItemId').value = index;
-            document.getElementById('menuFormTitle').textContent = '✏️ Edit Item';
-            document.querySelector('.btn-save').textContent = 'Update Item';
-            document.getElementById('menuForm').scrollIntoView({ behavior: 'smooth' });
-        }
+       function editMenuItem(index) {
+    var item = allMenuItems[index];
+    document.getElementById('menuCategory').value = item.category;
+    document.getElementById('menuName').value = item.name;
+    document.getElementById('menuDesc').value = item.desc;
+    document.getElementById('menuPrice').value = item.price;
+    document.getElementById('menuImage').value = item.image || '';
+    
+    // Show image preview if exists
+    if (item.image && item.image !== 'default.jpg' && item.image.startsWith('data:image')) {
+        document.getElementById('imagePreview').src = item.image;
+        document.getElementById('imagePreviewContainer').style.display = 'block';
+    } else {
+        document.getElementById('imagePreviewContainer').style.display = 'none';
+    }
+    
+    document.getElementById('editItemId').value = index;
+    document.getElementById('menuFormTitle').textContent = '✏️ Edit Item';
+    document.querySelector('.btn-save').textContent = 'Update Item';
+    document.getElementById('menuForm').scrollIntoView({ behavior: 'smooth' });
+}
 
         function cancelEdit() {
-            document.getElementById('menuCategory').value = 'Burgers';
-            document.getElementById('menuName').value = '';
-            document.getElementById('menuDesc').value = '';
-            document.getElementById('menuPrice').value = '';
-            document.getElementById('menuImage').value = '';
-            document.getElementById('editItemId').value = '';
-            document.getElementById('menuFormTitle').textContent = 'Add New Item';
-            document.querySelector('.btn-save').textContent = 'Save Item';
-        }
+    document.getElementById('menuCategory').value = 'Burgers';
+    document.getElementById('menuName').value = '';
+    document.getElementById('menuDesc').value = '';
+    document.getElementById('menuPrice').value = '';
+    document.getElementById('menuImage').value = '';
+    document.getElementById('menuImageFile').value = '';
+    document.getElementById('imagePreviewContainer').style.display = 'none';
+    document.getElementById('editItemId').value = '';
+    document.getElementById('menuFormTitle').textContent = 'Add New Item';
+    document.querySelector('.btn-save').textContent = 'Save Item';
+}
 
         function deleteMenuItem(index) {
             if (confirm('Delete "' + allMenuItems[index].name + '"?')) {
